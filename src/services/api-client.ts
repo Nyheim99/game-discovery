@@ -25,11 +25,23 @@ async function fetchData<T>(
   return response.json()
 }
 
-// The shape of a single game (just the fields we care about for now).
+// RAWG nests each platform under a `platform` key in `parent_platforms`.
+export interface ParentPlatform {
+  platform: {
+    id: number
+    name: string
+    slug: string
+  }
+}
+
+// The shape of a single game (the fields we use).
 export interface Game {
   id: number
   name: string
   background_image: string
+  metacritic: number | null
+  rating: number
+  parent_platforms: ParentPlatform[]
 }
 
 // Everything the user can ask for, bundled into one object.

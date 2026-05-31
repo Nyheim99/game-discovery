@@ -1,5 +1,7 @@
 import type { Game } from '@/services/api-client'
 import { useFavorites } from '@/context/favorites-context'
+import CriticScore from './CriticScore'
+import PlatformIconList from './PlatformIconList'
 import noImagePlaceholder from '@/assets/no-image-placeholder.svg'
 
 interface Props {
@@ -25,7 +27,13 @@ function GameCard({ game }: Props) {
         {favorite ? '★' : '☆'}
       </button>
       <img src={game.background_image || noImagePlaceholder} alt={game.name} />
-      <h2>{game.name}</h2>
+      <div className="game-card-body">
+        <div className="game-card-meta">
+          <PlatformIconList platforms={game.parent_platforms} />
+          {game.metacritic ? <CriticScore score={game.metacritic} /> : null}
+        </div>
+        <h2>{game.name}</h2>
+      </div>
     </div>
   )
 }

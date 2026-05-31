@@ -161,10 +161,57 @@
   display: block;
 }
 
+.game-card-body {
+  padding: 12px;
+}
+
+.game-card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.platform-icons {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 0.95rem;
+  color: #8a8a99;
+}
+
+.platform-icons li {
+  display: flex;
+}
+
+.critic-score {
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.critic-green {
+  background: #c3f0ca;
+  color: #1a7f37;
+}
+
+.critic-yellow {
+  background: #f4f1cb;
+  color: #8a7a00;
+}
+
+.critic-red {
+  background: #f5c6c6;
+  color: #b00020;
+}
+
 .game-card h2 {
   font-size: 1.1rem;
   margin: 0;
-  padding: 12px;
 }
 
 .skeleton-image {

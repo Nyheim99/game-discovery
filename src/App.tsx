@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import './App.css'
 import type { GameQuery } from '@/services/api-client'
+import ActiveFilters from '@/components/ActiveFilters'
 import GameGrid from '@/components/GameGrid'
 import GenreList from '@/components/GenreList'
 import PlatformSelector from '@/components/PlatformSelector'
@@ -47,6 +48,12 @@ function App() {
               }
             />
           </div>
+          <ActiveFilters
+            gameQuery={gameQuery}
+            onClearSearch={() => setGameQuery({ ...gameQuery, searchText: '' })}
+            onClearGenre={() => setGameQuery({ ...gameQuery, genreId: null })}
+            onClearPlatform={() => setGameQuery({ ...gameQuery, platformId: null })}
+          />
           <GameGrid gameQuery={gameQuery} />
         </main>
       </div>

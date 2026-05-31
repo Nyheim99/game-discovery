@@ -44,15 +44,21 @@ function GameGrid({ gameQuery }: Props) {
   // `data.pages` is an array of page-responses; flatten them into one
   // list of games.
   const games = data?.pages.flatMap((page) => page.results) ?? []
+  // Total number of matching games (RAWG sends this on each page).
+  const totalCount = data?.pages[0]?.count ?? 0
 
   if (error) return <p role="alert">Error: {error.message}</p>
   if (!isLoading && games.length === 0) return <p role="status">No games found.</p>
 
   return (
     <>
-      {isLoading && (
+      {isLoading ? (
         <p className="sr-only" role="status">
           Loading games…
+        </p>
+      ) : (
+        <p className="results-count" role="status">
+          {totalCount.toLocaleString()} games found
         </p>
       )}
 

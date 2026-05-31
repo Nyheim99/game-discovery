@@ -26,10 +26,14 @@ const iconMap: Record<string, IconType> = {
 }
 
 interface Props {
-  platforms: ParentPlatform[]
+  // RAWG sometimes omits parent_platforms (e.g. for obscure games), so this
+  // can be undefined at runtime even though most games have it.
+  platforms?: ParentPlatform[]
 }
 
 function PlatformIconList({ platforms }: Props) {
+  if (!platforms?.length) return null
+
   return (
     <ul className="platform-icons">
       {platforms.map(({ platform }) => {

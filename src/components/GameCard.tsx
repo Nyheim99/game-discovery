@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { FaHeart, FaRegHeart } from 'react-icons/fa'
 import type { Game } from '@/services/api-client'
+import { getCroppedImageUrl } from '@/services/image-url'
 import { useFavorites } from '@/context/favorites-context'
 import CriticScore from './CriticScore'
 import PlatformIconList from './PlatformIconList'
@@ -34,8 +35,13 @@ function GameCard({ game }: Props) {
       <Link to={`/games/${game.slug}`} className="block">
         <div className="aspect-[16/10] overflow-hidden">
           <img
-            src={game.background_image || noImagePlaceholder}
+            src={
+              game.background_image
+                ? getCroppedImageUrl(game.background_image)
+                : noImagePlaceholder
+            }
             alt={game.name}
+            loading="lazy"
             className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
           />
         </div>

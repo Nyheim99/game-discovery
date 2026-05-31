@@ -18,7 +18,23 @@ function GenreList({ selectedGenreId, onSelectGenre }: Props) {
 
   // If genres fail to load, just hide the list rather than break the page.
   if (error) return null
-  if (isLoading) return <p className="text-muted">Loading genres…</p>
+
+  // Reserve the list's space while loading so the content below it doesn't
+  // jump when the genres arrive (this was the main layout-shift culprit).
+  if (isLoading) {
+    return (
+      <>
+        <h2 className="mb-3 font-display text-lg font-semibold">Genres</h2>
+        <ul className="space-y-1" aria-hidden="true">
+          {Array.from({ length: 19 }, (_, i) => i).map((i) => (
+            <li key={i} className="px-3 py-2">
+              <div className="h-5 w-full animate-pulse rounded bg-surface-2" />
+            </li>
+          ))}
+        </ul>
+      </>
+    )
+  }
 
   return (
     <>

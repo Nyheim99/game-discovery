@@ -1,0 +1,37 @@
+name: CI
+
+# Run on every PR, and on direct pushes to main (e.g. after a merge).
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    name: Lint, test & build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm # cache ~/.npm between runs for faster installs
+
+      # `npm ci` installs exactly what's in package-lock.json — reproducible,
+      # and fails if package.json and the lockfile are out of sync.
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Run tests
+        run: npm run test:run
+
+      # `npm run build` is `tsc -b && vite build`, so this also type-checks.
+      - name: Build
+        run: npm run build

@@ -47,9 +47,18 @@ function GameGrid({ gameQuery }: Props) {
   // Total number of matching games (RAWG sends this on each page).
   const totalCount = data?.pages[0]?.count ?? 0
 
-  if (error) return <p role="alert">Error: {error.message}</p>
+  if (error)
+    return (
+      <p role="alert" className="py-10 text-center text-red-400">
+        Error: {error.message}
+      </p>
+    )
   if (!isLoading && games.length === 0)
-    return <p role="status">No games found.</p>
+    return (
+      <p role="status" className="py-10 text-center text-muted">
+        No games found.
+      </p>
+    )
 
   return (
     <>
@@ -58,19 +67,22 @@ function GameGrid({ gameQuery }: Props) {
           Loading games…
         </p>
       ) : (
-        <p className="results-count" role="status">
+        <p className="mb-4 text-muted" role="status">
           {totalCount.toLocaleString()} games found
         </p>
       )}
 
-      <div className="game-grid">
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-5">
         {isLoading
           ? skeletons.map((skeleton) => <GameCardSkeleton key={skeleton} />)
           : games.map((game) => <GameCard key={game.id} game={game} />)}
       </div>
 
       {hasNextPage && (
-        <div ref={sentinelRef} className="load-more-sentinel">
+        <div
+          ref={sentinelRef}
+          className="flex min-h-10 justify-center py-6 text-muted"
+        >
           {isFetchingNextPage && <p role="status">Loading more…</p>}
         </div>
       )}

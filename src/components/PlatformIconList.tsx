@@ -35,13 +35,13 @@ function PlatformIconList({ platforms }: Props) {
   if (!platforms?.length) return null
 
   return (
-    <ul className="platform-icons">
+    <ul className="flex items-center gap-1.5 text-muted">
       {platforms.map(({ platform }) => {
         const Icon = iconMap[platform.slug]
         if (!Icon) return null // skip platforms we don't have an icon for
 
         return (
-          <li key={platform.id} title={platform.name}>
+          <li key={platform.id} title={platform.name} className="flex">
             <Icon aria-label={platform.name} />
           </li>
         )

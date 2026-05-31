@@ -14,7 +14,7 @@ const sortOptions = [
 function SortSelector({ sortOrder, onChangeSortOrder }: Props) {
   return (
     <select
-      className="sort-selector"
+      className="cursor-pointer rounded-lg border border-border bg-surface-2 px-3 py-2 text-sm text-text outline-none transition focus:border-accent"
       aria-label="Order games by"
       value={sortOrder}
       onChange={(event) => onChangeSortOrder(event.target.value)}

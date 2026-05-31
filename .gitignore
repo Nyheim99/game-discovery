@@ -12,9 +12,6 @@ dist
 dist-ssr
 *.local
 
-# Scratch design mockup (local only)
-design-preview.html
-
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

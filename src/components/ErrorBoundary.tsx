@@ -25,9 +25,11 @@ class ErrorBoundary extends Component<Props, State> {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="error-boundary">
-          <h2>Something went wrong.</h2>
-          <p>Please try reloading the page.</p>
+        <div className="mx-auto mt-20 max-w-md text-center">
+          <h2 className="mb-2 font-display text-xl font-semibold">
+            Something went wrong.
+          </h2>
+          <p className="text-muted">Please try reloading the page.</p>
         </div>
       )
     }

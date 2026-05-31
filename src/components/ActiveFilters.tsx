@@ -25,18 +25,26 @@ function ActiveFilters({
 
   // Look up human-readable names for the selected ids.
   const genreName = genres?.find((g) => g.id === gameQuery.genreId)?.name
-  const platformName = platforms?.find((p) => p.id === gameQuery.platformId)?.name
+  const platformName = platforms?.find(
+    (p) => p.id === gameQuery.platformId,
+  )?.name
 
   // Build the list of chips to show from whatever filters are active.
   const chips: Chip[] = []
   if (gameQuery.searchText) {
-    chips.push({ label: `Search: ${gameQuery.searchText}`, onRemove: onClearSearch })
+    chips.push({
+      label: `Search: ${gameQuery.searchText}`,
+      onRemove: onClearSearch,
+    })
   }
   if (genreName) {
     chips.push({ label: `Genre: ${genreName}`, onRemove: onClearGenre })
   }
   if (platformName) {
-    chips.push({ label: `Platform: ${platformName}`, onRemove: onClearPlatform })
+    chips.push({
+      label: `Platform: ${platformName}`,
+      onRemove: onClearPlatform,
+    })
   }
 
   if (chips.length === 0) return null

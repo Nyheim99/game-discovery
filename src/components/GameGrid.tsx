@@ -48,7 +48,8 @@ function GameGrid({ gameQuery }: Props) {
   const totalCount = data?.pages[0]?.count ?? 0
 
   if (error) return <p role="alert">Error: {error.message}</p>
-  if (!isLoading && games.length === 0) return <p role="status">No games found.</p>
+  if (!isLoading && games.length === 0)
+    return <p role="status">No games found.</p>
 
   return (
     <>

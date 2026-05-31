@@ -99,10 +99,34 @@
 }
 
 .game-card {
+  position: relative;
   border-radius: 10px;
   overflow: hidden;
   background: rgba(127, 127, 127, 0.12);
   transition: transform 0.15s ease-in-out;
+}
+
+.favorite-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 1;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.55);
+  color: gold;
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.favorite-button:hover {
+  background: rgba(0, 0, 0, 0.75);
 }
 
 .game-card:hover {

@@ -1,0 +1,24 @@
+# Dependabot keeps dependencies up to date by opening PRs for outdated or
+# vulnerable packages. Those PRs run through our CI workflow before we merge.
+# Docs: https://docs.github.com/code-security/dependabot
+version: 2
+updates:
+  # npm packages in package.json / package-lock.json
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+    # Bundle related bumps into fewer PRs instead of one PR per package.
+    groups:
+      # All non-major (patch + minor) updates in a single PR — low risk.
+      minor-and-patch:
+        update-types:
+          - minor
+          - patch
+    open-pull-requests-limit: 5
+
+  # The actions used in .github/workflows (e.g. actions/checkout) also drift.
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly

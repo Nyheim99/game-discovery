@@ -6,6 +6,12 @@ on:
   push:
     branches: [main]
 
+# If you push again before a run finishes, cancel the older run for the same
+# branch — no point spending minutes testing a commit you've already replaced.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     name: Lint, test & build

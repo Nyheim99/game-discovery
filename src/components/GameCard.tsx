@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import type { Game } from '@/services/api-client'
 import { useFavorites } from '@/context/favorites-context'
 import CriticScore from './CriticScore'
@@ -14,6 +15,8 @@ function GameCard({ game }: Props) {
 
   return (
     <div className="game-card">
+      {/* The favorite button is a sibling of the Link (not nested inside it):
+          an <a> may not contain a <button>. */}
       <button
         className="favorite-button"
         aria-pressed={favorite}
@@ -26,14 +29,21 @@ function GameCard({ game }: Props) {
       >
         {favorite ? '★' : '☆'}
       </button>
-      <img src={game.background_image || noImagePlaceholder} alt={game.name} />
-      <div className="game-card-body">
-        <div className="game-card-meta">
-          <PlatformIconList platforms={game.parent_platforms} />
-          {game.metacritic ? <CriticScore score={game.metacritic} /> : null}
+      {/* Link renders an <a> but intercepts the click to navigate without a
+          full page reload. */}
+      <Link to={`/games/${game.slug}`} className="game-card-link">
+        <img
+          src={game.background_image || noImagePlaceholder}
+          alt={game.name}
+        />
+        <div className="game-card-body">
+          <div className="game-card-meta">
+            <PlatformIconList platforms={game.parent_platforms} />
+            {game.metacritic ? <CriticScore score={game.metacritic} /> : null}
+          </div>
+          <h2>{game.name}</h2>
         </div>
-        <h2>{game.name}</h2>
-      </div>
+      </Link>
     </div>
   )
 }

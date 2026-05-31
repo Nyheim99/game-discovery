@@ -1,65 +1,21 @@
-import { useState } from 'react'
+import { Route, Routes } from 'react-router-dom'
 import './App.css'
-import type { GameQuery } from '@/services/api-client'
-import ActiveFilters from '@/components/ActiveFilters'
-import GameGrid from '@/components/GameGrid'
-import GenreList from '@/components/GenreList'
-import PlatformSelector from '@/components/PlatformSelector'
-import SearchInput from '@/components/SearchInput'
-import SortSelector from '@/components/SortSelector'
-import ThemeToggle from '@/components/ThemeToggle'
+import Layout from '@/components/Layout'
+import HomePage from '@/pages/HomePage'
+import GameDetailPage from '@/pages/GameDetailPage'
 
+// App is now just the route map. The outer Route renders Layout (the shared
+// header), and its child routes render into Layout's <Outlet />:
+//   "/"             -> HomePage   (index = the default child)
+//   "/games/:slug"  -> GameDetailPage
 function App() {
-  const [gameQuery, setGameQuery] = useState<GameQuery>({
-    genreId: null,
-    platformId: null,
-    searchText: '',
-    sortOrder: '',
-  })
-
   return (
-    <div className="app">
-      <header className="app-header">
-        <h1>Game Discovery</h1>
-        <ThemeToggle />
-      </header>
-      <SearchInput
-        onSearch={(searchText) => setGameQuery({ ...gameQuery, searchText })}
-      />
-      <div className="content">
-        <aside className="sidebar">
-          <GenreList
-            selectedGenreId={gameQuery.genreId}
-            onSelectGenre={(genreId) => setGameQuery({ ...gameQuery, genreId })}
-          />
-        </aside>
-        <main className="main">
-          <div className="toolbar">
-            <PlatformSelector
-              selectedPlatformId={gameQuery.platformId}
-              onSelectPlatform={(platformId) =>
-                setGameQuery({ ...gameQuery, platformId })
-              }
-            />
-            <SortSelector
-              sortOrder={gameQuery.sortOrder}
-              onChangeSortOrder={(sortOrder) =>
-                setGameQuery({ ...gameQuery, sortOrder })
-              }
-            />
-          </div>
-          <ActiveFilters
-            gameQuery={gameQuery}
-            onClearSearch={() => setGameQuery({ ...gameQuery, searchText: '' })}
-            onClearGenre={() => setGameQuery({ ...gameQuery, genreId: null })}
-            onClearPlatform={() =>
-              setGameQuery({ ...gameQuery, platformId: null })
-            }
-          />
-          <GameGrid gameQuery={gameQuery} />
-        </main>
-      </div>
-    </div>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<HomePage />} />
+        <Route path="games/:slug" element={<GameDetailPage />} />
+      </Route>
+    </Routes>
   )
 }
 

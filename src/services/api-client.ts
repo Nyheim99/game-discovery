@@ -52,7 +52,8 @@ export interface Game {
   background_image: string
   metacritic: number | null
   rating: number
-  parent_platforms: ParentPlatform[]
+  // Optional: RAWG omits this for some games, so callers must not assume it.
+  parent_platforms?: ParentPlatform[]
 }
 
 // The detail endpoint returns everything a Game has, plus richer fields we

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
-import { useGames } from '../hooks/useGames'
-import type { GameQuery } from '../services/api-client'
+import { useGames } from '@/hooks/useGames'
+import type { GameQuery } from '@/services/api-client'
 import GameCard from './GameCard'
 import GameCardSkeleton from './GameCardSkeleton'
 
@@ -45,11 +45,17 @@ function GameGrid({ gameQuery }: Props) {
   // list of games.
   const games = data?.pages.flatMap((page) => page.results) ?? []
 
-  if (error) return <p>Error: {error.message}</p>
-  if (!isLoading && games.length === 0) return <p>No games found.</p>
+  if (error) return <p role="alert">Error: {error.message}</p>
+  if (!isLoading && games.length === 0) return <p role="status">No games found.</p>
 
   return (
     <>
+      {isLoading && (
+        <p className="sr-only" role="status">
+          Loading games…
+        </p>
+      )}
+
       <div className="game-grid">
         {isLoading
           ? skeletons.map((skeleton) => <GameCardSkeleton key={skeleton} />)
@@ -58,7 +64,7 @@ function GameGrid({ gameQuery }: Props) {
 
       {hasNextPage && (
         <div ref={sentinelRef} className="load-more-sentinel">
-          {isFetchingNextPage && <p>Loading more…</p>}
+          {isFetchingNextPage && <p role="status">Loading more…</p>}
         </div>
       )}
     </>

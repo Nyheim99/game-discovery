@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
-import { fetchGames, type GameQuery } from '../services/api-client'
+import { fetchGames, type GameQuery } from '@/services/api-client'
 
 export function useGames(gameQuery: GameQuery) {
   return useInfiniteQuery({

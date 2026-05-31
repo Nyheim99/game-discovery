@@ -1,4 +1,4 @@
-import { useGenres } from '../hooks/useGenres'
+import { useGenres } from '@/hooks/useGenres'
 
 interface Props {
   selectedGenreId: number | null
@@ -13,26 +13,31 @@ function GenreList({ selectedGenreId, onSelectGenre }: Props) {
   if (isLoading) return <p>Loading genres…</p>
 
   return (
-    <ul className="genre-list">
-      <li key={0}>
-        <button
-          className={selectedGenreId === null ? 'selected' : ''}
-          onClick={() => onSelectGenre(null)}
-        >
-          All genres
-        </button>
-      </li>
-      {genres?.map((genre) => (
-        <li key={genre.id}>
+    <>
+      <h2 className="sidebar-heading">Genres</h2>
+      <ul className="genre-list">
+        <li>
           <button
-            className={genre.id === selectedGenreId ? 'selected' : ''}
-            onClick={() => onSelectGenre(genre.id)}
+            className={selectedGenreId === null ? 'selected' : ''}
+            aria-pressed={selectedGenreId === null}
+            onClick={() => onSelectGenre(null)}
           >
-            {genre.name}
+            All genres
           </button>
         </li>
-      ))}
-    </ul>
+        {genres?.map((genre) => (
+          <li key={genre.id}>
+            <button
+              className={genre.id === selectedGenreId ? 'selected' : ''}
+              aria-pressed={genre.id === selectedGenreId}
+              onClick={() => onSelectGenre(genre.id)}
+            >
+              {genre.name}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </>
   )
 }
 

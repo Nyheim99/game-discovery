@@ -1,9 +1,6 @@
-import { useQuery } from '@tanstack/react-query'
-import { fetchGenres } from '../services/api-client'
+import { useData } from './useData'
+import { fetchGenres, type Genre } from '@/services/api-client'
 
 export function useGenres() {
-  return useQuery({
-    queryKey: ['genres'],
-    queryFn: fetchGenres,
-  })
+  return useData<Genre>('genres', fetchGenres)
 }

@@ -1,9 +1,6 @@
-import { useQuery } from '@tanstack/react-query'
-import { fetchPlatforms } from '../services/api-client'
+import { useData } from './useData'
+import { fetchPlatforms, type Platform } from '@/services/api-client'
 
 export function usePlatforms() {
-  return useQuery({
-    queryKey: ['platforms'],
-    queryFn: fetchPlatforms,
-  })
+  return useData<Platform>('platforms', fetchPlatforms)
 }

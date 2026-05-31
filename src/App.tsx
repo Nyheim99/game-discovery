@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import './App.css'
-import type { GameQuery } from './services/api-client'
-import GameGrid from './components/GameGrid'
-import GenreList from './components/GenreList'
-import PlatformSelector from './components/PlatformSelector'
-import SearchInput from './components/SearchInput'
-import SortSelector from './components/SortSelector'
+import type { GameQuery } from '@/services/api-client'
+import GameGrid from '@/components/GameGrid'
+import GenreList from '@/components/GenreList'
+import PlatformSelector from '@/components/PlatformSelector'
+import SearchInput from '@/components/SearchInput'
+import SortSelector from '@/components/SortSelector'
 
 function App() {
   const [gameQuery, setGameQuery] = useState<GameQuery>({

@@ -6,6 +6,7 @@ import GenreList from '@/components/GenreList'
 import PlatformSelector from '@/components/PlatformSelector'
 import SearchInput from '@/components/SearchInput'
 import SortSelector from '@/components/SortSelector'
+import ThemeToggle from '@/components/ThemeToggle'
 
 function App() {
   const [gameQuery, setGameQuery] = useState<GameQuery>({
@@ -17,7 +18,10 @@ function App() {
 
   return (
     <div className="app">
-      <h1>Game Discovery</h1>
+      <header className="app-header">
+        <h1>Game Discovery</h1>
+        <ThemeToggle />
+      </header>
       <SearchInput
         onSearch={(searchText) => setGameQuery({ ...gameQuery, searchText })}
       />

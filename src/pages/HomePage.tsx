@@ -40,15 +40,15 @@ function HomePage() {
   return (
     <>
       <SearchInput onSearch={(searchText) => updateQuery({ searchText })} />
-      <div className="content">
-        <aside className="sidebar">
+      <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
+        <aside className="shrink-0 lg:w-52">
           <GenreList
             selectedGenreId={gameQuery.genreId}
             onSelectGenre={(genreId) => updateQuery({ genreId })}
           />
         </aside>
-        <main className="main">
-          <div className="toolbar">
+        <main className="min-w-0 flex-1">
+          <div className="mb-5 flex flex-wrap gap-3">
             <PlatformSelector
               selectedPlatformId={gameQuery.platformId}
               onSelectPlatform={(platformId) => updateQuery({ platformId })}

@@ -1,3 +1,4 @@
+import { FiX } from 'react-icons/fi'
 import type { GameQuery } from '@/services/api-client'
 import { useGenres } from '@/hooks/useGenres'
 import { usePlatforms } from '@/hooks/usePlatforms'
@@ -50,16 +51,20 @@ function ActiveFilters({
   if (chips.length === 0) return null
 
   return (
-    <ul className="active-filters">
+    <ul className="mb-4 flex flex-wrap gap-2">
       {chips.map((chip) => (
-        <li key={chip.label} className="filter-chip">
+        <li
+          key={chip.label}
+          className="flex items-center gap-2 rounded-full bg-surface-2 py-1 pr-1.5 pl-3 text-sm"
+        >
           {chip.label}
           <button
             type="button"
             aria-label={`Remove filter: ${chip.label}`}
             onClick={chip.onRemove}
+            className="flex h-5 w-5 items-center justify-center rounded-full text-muted transition hover:bg-border hover:text-text"
           >
-            ×
+            <FiX size={14} />
           </button>
         </li>
       ))}

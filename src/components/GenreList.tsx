@@ -5,20 +5,28 @@ interface Props {
   onSelectGenre: (genreId: number | null) => void
 }
 
+// Shared button styling; the selected genre gets an unmistakable accent pill.
+function itemClass(selected: boolean) {
+  const base = 'w-full rounded-lg px-3 py-2 text-left text-sm transition'
+  return selected
+    ? `${base} bg-accent/15 font-semibold text-accent`
+    : `${base} text-muted hover:bg-surface-2 hover:text-text`
+}
+
 function GenreList({ selectedGenreId, onSelectGenre }: Props) {
   const { data: genres, error, isLoading } = useGenres()
 
   // If genres fail to load, just hide the list rather than break the page.
   if (error) return null
-  if (isLoading) return <p>Loading genres…</p>
+  if (isLoading) return <p className="text-muted">Loading genres…</p>
 
   return (
     <>
-      <h2 className="sidebar-heading">Genres</h2>
-      <ul className="genre-list">
+      <h2 className="mb-3 font-display text-lg font-semibold">Genres</h2>
+      <ul className="space-y-1">
         <li>
           <button
-            className={selectedGenreId === null ? 'selected' : ''}
+            className={itemClass(selectedGenreId === null)}
             aria-pressed={selectedGenreId === null}
             onClick={() => onSelectGenre(null)}
           >
@@ -28,7 +36,7 @@ function GenreList({ selectedGenreId, onSelectGenre }: Props) {
         {genres?.map((genre) => (
           <li key={genre.id}>
             <button
-              className={genre.id === selectedGenreId ? 'selected' : ''}
+              className={itemClass(genre.id === selectedGenreId)}
               aria-pressed={genre.id === selectedGenreId}
               onClick={() => onSelectGenre(genre.id)}
             >

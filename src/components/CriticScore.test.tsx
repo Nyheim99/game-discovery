@@ -7,18 +7,18 @@ describe('CriticScore', () => {
     expect(screen.getByText('88')).toBeInTheDocument()
   })
 
-  it('uses the green class for high scores (>= 75)', () => {
+  it('marks high scores (>= 75)', () => {
     render(<CriticScore score={88} />)
-    expect(screen.getByText('88')).toHaveClass('critic-green')
+    expect(screen.getByText('88')).toHaveAttribute('data-tier', 'high')
   })
 
-  it('uses the yellow class for mid scores (50–74)', () => {
+  it('marks mid scores (50–74)', () => {
     render(<CriticScore score={60} />)
-    expect(screen.getByText('60')).toHaveClass('critic-yellow')
+    expect(screen.getByText('60')).toHaveAttribute('data-tier', 'medium')
   })
 
-  it('uses the red class for low scores (< 50)', () => {
+  it('marks low scores (< 50)', () => {
     render(<CriticScore score={42} />)
-    expect(screen.getByText('42')).toHaveClass('critic-red')
+    expect(screen.getByText('42')).toHaveAttribute('data-tier', 'low')
   })
 })

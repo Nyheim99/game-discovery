@@ -3,12 +3,14 @@ import Layout from '@/components/Layout'
 import HomePage from '@/pages/HomePage'
 import GameDetailPage from '@/pages/GameDetailPage'
 import FavoritesPage from '@/pages/FavoritesPage'
+import NotFoundPage from '@/pages/NotFoundPage'
 
 // App is now just the route map. The outer Route renders Layout (the shared
 // header), and its child routes render into Layout's <Outlet />:
 //   "/"             -> HomePage   (index = the default child)
 //   "/games/:slug"  -> GameDetailPage
 //   "/favorites"    -> FavoritesPage
+//   "*"             -> NotFoundPage (any URL that matches nothing above)
 function App() {
   return (
     <Routes>
@@ -16,6 +18,7 @@ function App() {
         <Route index element={<HomePage />} />
         <Route path="games/:slug" element={<GameDetailPage />} />
         <Route path="favorites" element={<FavoritesPage />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
   )

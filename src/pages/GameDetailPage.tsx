@@ -2,6 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { FiArrowLeft } from 'react-icons/fi'
 import { useGameDetails } from '@/hooks/useGameDetails'
 import CriticScore from '@/components/CriticScore'
+import GameDetailSkeleton from '@/components/GameDetailSkeleton'
 import PlatformIconList from '@/components/PlatformIconList'
 import noImagePlaceholder from '@/assets/no-image-placeholder.svg'
 
@@ -14,7 +15,14 @@ function GameDetailPage() {
   const { data: game, isLoading, isError } = useGameDetails(slug!)
 
   if (isLoading) {
-    return <p className="py-16 text-center text-muted">Loading…</p>
+    return (
+      <>
+        <p className="sr-only" role="status">
+          Loading game…
+        </p>
+        <GameDetailSkeleton />
+      </>
+    )
   }
 
   if (isError || !game) {

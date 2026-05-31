@@ -1,5 +1,7 @@
 # 🎮 Game Discovery
 
+**[🔗 Live demo](https://game-discovery-nyheim99s-projects.vercel.app)** &nbsp;·&nbsp; [![CI](https://github.com/Nyheim99/game-discovery/actions/workflows/ci.yml/badge.svg)](https://github.com/Nyheim99/game-discovery/actions/workflows/ci.yml)
+
 A video game discovery app — browse games, filter by genre and platform, search, sort, and save favorites. Built with **React 19**, **TypeScript**, and **Vite**, using data from the [RAWG Video Games Database API](https://rawg.io/apidocs).
 
 > **A learning project.** I'm learning to code with **[Claude Code](https://claude.com/claude-code)** (Anthropic's CLI agent) as my pair programmer — building a real, full-featured app feature by feature, and using each step to actually understand modern React and the tooling around it, rather than just copying snippets. The commit history and pull requests are the story of that process.
@@ -29,6 +31,7 @@ A video game discovery app — browse games, filter by genre and platform, searc
 | Testing       | Vitest + React Testing Library                                 |
 | Quality       | ESLint + Prettier, with pre-commit hooks (Husky + lint-staged) |
 | CI            | GitHub Actions (lint, format, test, build on every PR)         |
+| Hosting       | Vercel (auto-deploy from `main`, preview URLs per PR)          |
 
 ## 🚀 Getting started
 

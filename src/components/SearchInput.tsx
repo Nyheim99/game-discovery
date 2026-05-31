@@ -9,12 +9,13 @@ function SearchInput({ onSearch }: Props) {
   }
 
   return (
-    <form action={handleSubmit} className="search-form">
+    <form action={handleSubmit} className="search-form" role="search">
       <input
         name="search"
         type="search"
         placeholder="Search games…"
         className="search-input"
+        aria-label="Search games"
       />
     </form>
   )

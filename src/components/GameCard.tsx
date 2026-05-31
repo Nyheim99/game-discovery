@@ -1,5 +1,5 @@
-import type { Game } from '../services/api-client'
-import noImagePlaceholder from '../assets/no-image-placeholder.svg'
+import type { Game } from '@/services/api-client'
+import noImagePlaceholder from '@/assets/no-image-placeholder.svg'
 
 interface Props {
   game: Game

@@ -15,6 +15,7 @@ function SortSelector({ sortOrder, onChangeSortOrder }: Props) {
   return (
     <select
       className="sort-selector"
+      aria-label="Order games by"
       value={sortOrder}
       onChange={(event) => onChangeSortOrder(event.target.value)}
     >

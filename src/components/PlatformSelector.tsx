@@ -1,4 +1,4 @@
-import { usePlatforms } from '../hooks/usePlatforms'
+import { usePlatforms } from '@/hooks/usePlatforms'
 
 interface Props {
   selectedPlatformId: number | null
@@ -14,6 +14,7 @@ function PlatformSelector({ selectedPlatformId, onSelectPlatform }: Props) {
   return (
     <select
       className="platform-selector"
+      aria-label="Filter by platform"
       value={selectedPlatformId ?? ''}
       onChange={(event) => {
         const value = event.target.value

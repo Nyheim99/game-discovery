@@ -20,7 +20,10 @@ describe('SearchInput', () => {
     render(<SearchInput onSearch={onSearch} />)
 
     // Typing alone should not trigger a search (it happens on submit).
-    await user.type(screen.getByRole('searchbox', { name: 'Search games' }), 'halo')
+    await user.type(
+      screen.getByRole('searchbox', { name: 'Search games' }),
+      'halo',
+    )
 
     expect(onSearch).not.toHaveBeenCalled()
   })

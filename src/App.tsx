@@ -52,7 +52,9 @@ function App() {
             gameQuery={gameQuery}
             onClearSearch={() => setGameQuery({ ...gameQuery, searchText: '' })}
             onClearGenre={() => setGameQuery({ ...gameQuery, genreId: null })}
-            onClearPlatform={() => setGameQuery({ ...gameQuery, platformId: null })}
+            onClearPlatform={() =>
+              setGameQuery({ ...gameQuery, platformId: null })
+            }
           />
           <GameGrid gameQuery={gameQuery} />
         </main>

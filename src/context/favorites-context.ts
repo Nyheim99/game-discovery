@@ -6,9 +6,9 @@ export interface FavoritesContextValue {
   toggleFavorite: (id: number) => void
 }
 
-export const FavoritesContext = createContext<FavoritesContextValue | undefined>(
-  undefined,
-)
+export const FavoritesContext = createContext<
+  FavoritesContextValue | undefined
+>(undefined)
 
 // Consumer hook — throws if used outside the provider, so mistakes are loud.
 export function useFavorites() {

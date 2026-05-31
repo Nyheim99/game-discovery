@@ -5,7 +5,7 @@ version: 2
 updates:
   # npm packages in package.json / package-lock.json
   - package-ecosystem: npm
-    directory: "/"
+    directory: '/'
     schedule:
       interval: weekly
     # Bundle related bumps into fewer PRs instead of one PR per package.
@@ -19,6 +19,6 @@ updates:
 
   # The actions used in .github/workflows (e.g. actions/checkout) also drift.
   - package-ecosystem: github-actions
-    directory: "/"
+    directory: '/'
     schedule:
       interval: weekly

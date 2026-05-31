@@ -19,8 +19,10 @@ function FavoritesPage() {
   if (favoriteIds.length === 0) {
     return (
       <section>
-        <h2>Favorites</h2>
-        <p>No favorites yet. Tap the ☆ on a game to save it here.</p>
+        <h1 className="mb-5 font-display text-2xl font-bold">Favorites</h1>
+        <p className="text-muted">
+          No favorites yet — tap the heart on any game to save it here.
+        </p>
       </section>
     )
   }
@@ -32,11 +34,11 @@ function FavoritesPage() {
 
   return (
     <section>
-      <h2>Favorites</h2>
+      <h1 className="mb-5 font-display text-2xl font-bold">Favorites</h1>
       {isLoading && games.length === 0 ? (
-        <p>Loading…</p>
+        <p className="text-muted">Loading…</p>
       ) : (
-        <div className="game-grid">
+        <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-5">
           {games.map((game) => (
             <GameCard key={game.id} game={game} />
           ))}

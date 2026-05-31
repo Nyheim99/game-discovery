@@ -101,9 +101,17 @@
   font-size: 1rem;
   border: 1px solid rgba(127, 127, 127, 0.4);
   border-radius: 8px;
-  background: rgba(127, 127, 127, 0.08);
-  color: inherit;
+  /* System colors adapt to the current light/dark color-scheme, so the
+     native option list stays readable in both themes. */
+  background-color: Field;
+  color: FieldText;
   cursor: pointer;
+}
+
+.sort-selector option,
+.platform-selector option {
+  background-color: Field;
+  color: FieldText;
 }
 
 .game-grid {

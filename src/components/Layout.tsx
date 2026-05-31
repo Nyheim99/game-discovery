@@ -1,4 +1,4 @@
-import { Link, Outlet } from 'react-router-dom'
+import { Link, NavLink, Outlet } from 'react-router-dom'
 import ThemeToggle from './ThemeToggle'
 
 // The shell shared by every page: the header stays put while the routed page
@@ -12,7 +12,14 @@ function Layout() {
         <Link to="/" className="app-title">
           <h1>🎮 Game Discovery</h1>
         </Link>
-        <ThemeToggle />
+        <div className="app-header-actions">
+          {/* NavLink is like Link, but adds an "active" class when the current
+              URL matches — so we can highlight the page we're on. */}
+          <nav className="app-nav">
+            <NavLink to="/favorites">★ Favorites</NavLink>
+          </nav>
+          <ThemeToggle />
+        </div>
       </header>
       <Outlet />
     </div>

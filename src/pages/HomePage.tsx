@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import type { GameQuery } from '@/services/api-client'
 import ActiveFilters from '@/components/ActiveFilters'
 import GameGrid from '@/components/GameGrid'
@@ -7,50 +7,62 @@ import PlatformSelector from '@/components/PlatformSelector'
 import SearchInput from '@/components/SearchInput'
 import SortSelector from '@/components/SortSelector'
 
-// The discovery view: search + filters + the game grid. This used to be the
-// whole of App; now it's just the page rendered at "/".
+// The discovery view. The filters now live in the URL's query string
+// (e.g. /?genres=4&search=witcher) instead of component state, so a filtered
+// view survives navigation/refresh and can be bookmarked or shared.
 function HomePage() {
-  const [gameQuery, setGameQuery] = useState<GameQuery>({
-    genreId: null,
-    platformId: null,
-    searchText: '',
-    sortOrder: '',
-  })
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  // Derive the GameQuery from the URL — the URL is the single source of truth.
+  const gameQuery: GameQuery = {
+    genreId: searchParams.get('genres')
+      ? Number(searchParams.get('genres'))
+      : null,
+    platformId: searchParams.get('platforms')
+      ? Number(searchParams.get('platforms'))
+      : null,
+    searchText: searchParams.get('search') ?? '',
+    sortOrder: searchParams.get('ordering') ?? '',
+  }
+
+  // Apply a partial change and write the result back into the URL. Empty/null
+  // fields are omitted so the URL stays clean (no ?genres=&search=).
+  function updateQuery(patch: Partial<GameQuery>) {
+    const next = { ...gameQuery, ...patch }
+    const params: Record<string, string> = {}
+    if (next.genreId) params.genres = String(next.genreId)
+    if (next.platformId) params.platforms = String(next.platformId)
+    if (next.searchText) params.search = next.searchText
+    if (next.sortOrder) params.ordering = next.sortOrder
+    setSearchParams(params)
+  }
 
   return (
     <>
-      <SearchInput
-        onSearch={(searchText) => setGameQuery({ ...gameQuery, searchText })}
-      />
+      <SearchInput onSearch={(searchText) => updateQuery({ searchText })} />
       <div className="content">
         <aside className="sidebar">
           <GenreList
             selectedGenreId={gameQuery.genreId}
-            onSelectGenre={(genreId) => setGameQuery({ ...gameQuery, genreId })}
+            onSelectGenre={(genreId) => updateQuery({ genreId })}
           />
         </aside>
         <main className="main">
           <div className="toolbar">
             <PlatformSelector
               selectedPlatformId={gameQuery.platformId}
-              onSelectPlatform={(platformId) =>
-                setGameQuery({ ...gameQuery, platformId })
-              }
+              onSelectPlatform={(platformId) => updateQuery({ platformId })}
             />
             <SortSelector
               sortOrder={gameQuery.sortOrder}
-              onChangeSortOrder={(sortOrder) =>
-                setGameQuery({ ...gameQuery, sortOrder })
-              }
+              onChangeSortOrder={(sortOrder) => updateQuery({ sortOrder })}
             />
           </div>
           <ActiveFilters
             gameQuery={gameQuery}
-            onClearSearch={() => setGameQuery({ ...gameQuery, searchText: '' })}
-            onClearGenre={() => setGameQuery({ ...gameQuery, genreId: null })}
-            onClearPlatform={() =>
-              setGameQuery({ ...gameQuery, platformId: null })
-            }
+            onClearSearch={() => updateQuery({ searchText: '' })}
+            onClearGenre={() => updateQuery({ genreId: null })}
+            onClearPlatform={() => updateQuery({ platformId: null })}
           />
           <GameGrid gameQuery={gameQuery} />
         </main>

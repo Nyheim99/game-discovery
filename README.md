@@ -9,10 +9,11 @@ A video game discovery app — browse games, filter by genre and platform, searc
 ## ✨ Features
 
 - **Browse & discover** games in a responsive card grid
-- **Filter** by genre and by platform
+- **Game detail pages** with description, platforms, Metacritic score, and release date
+- **Filter** by genre and by platform — filters live in the URL, so views are shareable
 - **Search** games by name
 - **Sort** by rating, release date, name, and more
-- **Favorites** — star games, persisted across reloads
+- **Favorites** — star games, persisted across reloads, with a dedicated favorites page
 - **Infinite scroll** for seamless browsing
 - **Dark / light theme** that respects your OS preference
 - **Rich cards** with Metacritic scores and platform icons
@@ -26,6 +27,7 @@ A video game discovery app — browse games, filter by genre and platform, searc
 | Framework     | React 19                                                       |
 | Language      | TypeScript                                                     |
 | Build tool    | Vite                                                           |
+| Routing       | React Router                                                   |
 | Data fetching | TanStack Query (incl. infinite queries)                        |
 | Icons         | react-icons                                                    |
 | Testing       | Vitest + React Testing Library                                 |

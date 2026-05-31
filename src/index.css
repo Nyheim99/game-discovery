@@ -1,16 +1,57 @@
+@import 'tailwindcss';
+
+/* Drive dark mode off a `.dark` class on <html> (toggled by ThemeProvider),
+   instead of Tailwind's default prefers-color-scheme. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Semantic color tokens. These CSS variables flip between the two themes, so
+   everything styled with them adapts automatically. */
 :root {
-  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
-  line-height: 1.5;
-  color-scheme: light dark;
+  --bg: #fbfbfd;
+  --surface: #ffffff;
+  --surface-2: #f4f4f5;
+  --text: #18181b;
+  --muted: #71717a;
+  --border: #e7e7ec;
+  --accent: #6d4aff;
+  --accent-contrast: #ffffff;
 }
 
-* {
-  box-sizing: border-box;
+.dark {
+  --bg: #0c0c12;
+  --surface: #16161f;
+  --surface-2: #1e1e2a;
+  --text: #e9e9f0;
+  --muted: #9a9ab0;
+  --border: rgba(255, 255, 255, 0.08);
+  --accent: #8b6dff;
+  --accent-contrast: #0c0c12;
+}
+
+/* Expose the tokens + fonts to Tailwind so we get utilities like `bg-surface`,
+   `text-muted`, `border-border`, `bg-accent`, `font-display`. `inline` keeps
+   them referencing the live CSS variables, so theme switching still works. */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-contrast: var(--accent-contrast);
+
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  line-height: 1.5;
 }
 
 /* Visually hidden, but still read by screen readers. */

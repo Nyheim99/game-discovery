@@ -18,8 +18,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<Theme>(getInitialTheme)
 
   useEffect(() => {
-    // Drive the whole document's light/dark rendering, and remember the choice.
+    // Drive the whole document's light/dark rendering, toggle the `dark` class
+    // that Tailwind's dark: variant keys off, and remember the choice.
     document.documentElement.style.colorScheme = theme
+    document.documentElement.classList.toggle('dark', theme === 'dark')
     localStorage.setItem(STORAGE_KEY, theme)
   }, [theme])
 

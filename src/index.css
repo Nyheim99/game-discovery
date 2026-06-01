@@ -54,6 +54,16 @@ body {
   line-height: 1.5;
 }
 
+/* Hide the scrollbar on horizontal rails (e.g. the genre pill bar) while
+   keeping them scrollable. */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 /* Visually hidden, but still read by screen readers. */
 .sr-only {
   position: absolute;

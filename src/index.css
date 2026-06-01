@@ -54,6 +54,13 @@ body {
   line-height: 1.5;
 }
 
+/* Tailwind v4's Preflight no longer forces a pointer cursor on buttons, so they
+   inherit the browser default (an arrow). Restore the expected hand cursor for
+   every enabled button app-wide. */
+button:not(:disabled) {
+  cursor: pointer;
+}
+
 /* Hide the scrollbar on horizontal rails (e.g. the genre pill bar) while
    keeping them scrollable. */
 .no-scrollbar {

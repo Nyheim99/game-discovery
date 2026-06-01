@@ -3,6 +3,8 @@ import {
   fetchGenres,
   fetchPlatforms,
   fetchGameDetails,
+  fetchScreenshots,
+  fetchGameStores,
   type GameQuery,
 } from './api-client'
 
@@ -117,6 +119,30 @@ describe('api-client', () => {
 
       expect(calledUrl().pathname).toBe('/api/games/the-witcher-3')
       expect(result).toEqual(details)
+    })
+  })
+
+  describe('fetchScreenshots', () => {
+    it('hits /games/{slug}/screenshots and unwraps the results', async () => {
+      const shots = [{ id: 1, image: 'a.jpg' }]
+      mockFetchOnce({ count: 1, next: null, results: shots })
+
+      const result = await fetchScreenshots('celeste')
+
+      expect(calledUrl().pathname).toBe('/api/games/celeste/screenshots')
+      expect(result).toEqual(shots)
+    })
+  })
+
+  describe('fetchGameStores', () => {
+    it('hits /games/{slug}/stores and unwraps the results', async () => {
+      const links = [{ store_id: 1, url: 'https://store/celeste' }]
+      mockFetchOnce({ count: 1, next: null, results: links })
+
+      const result = await fetchGameStores('celeste')
+
+      expect(calledUrl().pathname).toBe('/api/games/celeste/stores')
+      expect(result).toEqual(links)
     })
   })
 })

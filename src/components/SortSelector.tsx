@@ -5,11 +5,17 @@ interface Props {
   onChangeSortOrder: (sortOrder: string) => void
 }
 
+// The empty value is the default "Popular" feed; fetchGames maps "no sort" to
+// most-added among recent releases, so that's what this option means (and it
+// leaves the ordering param off for a clean URL). "-added" is the same
+// popularity metric without the recency window — the all-time evergreens. The
+// rest are plain RAWG ordering params. (Release-date and Name sorts were
+// dropped — RAWG surfaces unreleased shovelware for the former and non-Latin
+// titles for the latter.)
 const sortOptions = [
-  { value: '', label: 'Relevance' },
-  { value: 'name', label: 'Name' },
-  { value: '-released', label: 'Release date' },
-  { value: '-metacritic', label: 'Popularity' },
+  { value: '', label: 'Popular' },
+  { value: '-added', label: 'Most added (all-time)' },
+  { value: '-metacritic', label: 'Metacritic' },
   { value: '-rating', label: 'Average rating' },
 ]
 

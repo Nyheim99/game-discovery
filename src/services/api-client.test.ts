@@ -65,7 +65,7 @@ describe('api-client', () => {
       expect(result).toEqual(body)
     })
 
-    it('omits every filter param when the query is empty', async () => {
+    it('omits the filters but defaults to popularity ordering when the query is empty', async () => {
       mockFetchOnce({ count: 0, next: null, results: [] })
 
       await fetchGames(emptyQuery, 1)
@@ -75,10 +75,15 @@ describe('api-client', () => {
       expect(url.searchParams.get('genres')).toBeNull()
       expect(url.searchParams.get('parent_platforms')).toBeNull()
       expect(url.searchParams.get('search')).toBeNull()
-      expect(url.searchParams.get('ordering')).toBeNull()
+      // No explicit sort defaults the home grid to popularity, not RAWG's order,
+      // and constrains it to a recent date window ("popular now").
+      expect(url.searchParams.get('ordering')).toBe('-added')
+      expect(url.searchParams.get('dates')).toMatch(
+        /^\d{4}-\d{2}-\d{2},\d{4}-\d{2}-\d{2}$/,
+      )
     })
 
-    it('orders search results by popularity when no sort is chosen', async () => {
+    it('orders search results by popularity but without the recent-date window', async () => {
       mockFetchOnce({ count: 0, next: null, results: [] })
 
       await fetchGames({ ...emptyQuery, searchText: 'witcher' }, 1)
@@ -86,6 +91,22 @@ describe('api-client', () => {
       const url = calledUrl()
       expect(url.searchParams.get('search')).toBe('witcher')
       expect(url.searchParams.get('ordering')).toBe('-added')
+      // Search spans all time — the date window is only for the default feed.
+      expect(url.searchParams.get('dates')).toBeNull()
+    })
+
+    it('keeps the recent-date window when filtering under the default sort', async () => {
+      mockFetchOnce({ count: 0, next: null, results: [] })
+
+      await fetchGames({ ...emptyQuery, genreId: 4 }, 1)
+
+      const url = calledUrl()
+      expect(url.searchParams.get('genres')).toBe('4')
+      expect(url.searchParams.get('ordering')).toBe('-added')
+      // "Popular" stays recent even when filtered (distinct from -added all-time).
+      expect(url.searchParams.get('dates')).toMatch(
+        /^\d{4}-\d{2}-\d{2},\d{4}-\d{2}-\d{2}$/,
+      )
     })
 
     it('keeps an explicit sort over the search-popularity default', async () => {

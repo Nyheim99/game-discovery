@@ -150,14 +150,30 @@ export function fetchGames(
   }
   if (query.sortOrder) {
     params.ordering = query.sortOrder
-  } else if (query.searchText) {
-    // No explicit sort while searching: order matches by popularity (how many
-    // users have added the game) so big titles beat obscure exact-name hits,
-    // instead of RAWG's default relevance ranking.
+  } else {
+    // No explicit sort → order by popularity (most-added).
     params.ordering = '-added'
+    // "Popular" always means recent-popular, so the date window applies whenever
+    // the default sort is active — genre/platform filters included. That keeps
+    // it distinct from the explicit "-added" (all-time) sort. Search is the lone
+    // exception: it spans all time so matches aren't hidden by the recency window.
+    if (!query.searchText) {
+      params.dates = recentReleaseWindow()
+    }
   }
 
   return fetchData<Game>('/games', params)
+}
+
+// A RAWG `dates` filter string covering roughly the last 18 months up to today,
+// e.g. "2024-12-01,2026-06-01". Used to keep the default feed fresh instead of
+// surfacing all-time classics.
+function recentReleaseWindow(): string {
+  const today = new Date()
+  const start = new Date(today)
+  start.setMonth(start.getMonth() - 18)
+  const iso = (date: Date) => date.toISOString().slice(0, 10)
+  return `${iso(start)},${iso(today)}`
 }
 
 // The shape of a single genre.

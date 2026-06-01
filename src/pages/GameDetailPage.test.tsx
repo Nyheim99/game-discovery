@@ -5,19 +5,17 @@ import { renderWithProviders } from '@/test/test-utils'
 import GameDetailPage from './GameDetailPage'
 import {
   fetchGameDetails,
-  fetchGames,
   fetchScreenshots,
   fetchGameStores,
 } from '@/services/api-client'
 
 vi.mock('@/services/api-client')
 
-// The detail page also renders the gallery, "where to buy" and "similar games"
-// sections; keep their data empty so these tests stay focused on the details.
+// The detail page also renders the gallery and "where to buy" sections; keep
+// their data empty so these tests stay focused on the details.
 beforeEach(() => {
   vi.mocked(fetchScreenshots).mockResolvedValue([])
   vi.mocked(fetchGameStores).mockResolvedValue([])
-  vi.mocked(fetchGames).mockResolvedValue({ count: 0, next: null, results: [] })
 })
 
 // Spy on navigation so we can assert the Back button without a real history.
@@ -76,7 +74,7 @@ describe('GameDetailPage', () => {
     ).toHaveAttribute('href', 'https://www.celestegame.com')
   })
 
-  it('omits optional sections when the data is missing', async () => {
+  it('falls back to placeholder facts, but still hides truly optional sections', async () => {
     vi.mocked(fetchGameDetails).mockResolvedValue({
       ...fullGame,
       released: null,
@@ -87,7 +85,11 @@ describe('GameDetailPage', () => {
     renderDetail()
 
     await screen.findByRole('heading', { name: 'Celeste' })
-    expect(screen.queryByText(/released/i)).not.toBeInTheDocument()
+    // Facts always render a row; missing values fall back rather than vanish.
+    expect(screen.getByText('Release date')).toBeInTheDocument()
+    expect(screen.getAllByText('Unknown').length).toBeGreaterThan(0)
+    expect(screen.getByText('Not rated')).toBeInTheDocument()
+    // The website link, though, is still hidden when there's no URL.
     expect(
       screen.queryByRole('link', { name: /official website/i }),
     ).not.toBeInTheDocument()

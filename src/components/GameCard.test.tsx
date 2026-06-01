@@ -59,7 +59,7 @@ describe('GameCard', () => {
     renderWithProviders(<GameCard game={game} />)
 
     const addButton = screen.getByRole('button', {
-      name: 'Add The Witcher 3 to favorites',
+      name: 'Add The Witcher 3 to wishlist',
     })
     expect(addButton).toHaveAttribute('aria-pressed', 'false')
 
@@ -67,7 +67,7 @@ describe('GameCard', () => {
 
     // After toggling, the same button now offers to remove and is pressed.
     const removeButton = screen.getByRole('button', {
-      name: 'Remove The Witcher 3 from favorites',
+      name: 'Remove The Witcher 3 from wishlist',
     })
     expect(removeButton).toHaveAttribute('aria-pressed', 'true')
   })

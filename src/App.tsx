@@ -11,7 +11,7 @@ import NotFoundPage from '@/pages/NotFoundPage'
 // header), and its child routes render into Layout's <Outlet />:
 //   "/"             -> HomePage   (index = the default child)
 //   "/games/:slug"  -> GameDetailPage
-//   "/favorites"    -> FavoritesPage
+//   "/wishlist"     -> FavoritesPage
 //   "*"             -> NotFoundPage (any URL that matches nothing above)
 function App() {
   return (
@@ -20,7 +20,7 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
           <Route path="games/:slug" element={<GameDetailPage />} />
-          <Route path="favorites" element={<FavoritesPage />} />
+          <Route path="wishlist" element={<FavoritesPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>

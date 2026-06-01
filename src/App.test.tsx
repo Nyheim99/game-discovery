@@ -46,10 +46,10 @@ describe('App routing', () => {
     ).toBeInTheDocument()
   })
 
-  it('renders the FavoritesPage at /favorites', () => {
-    renderWithProviders(<App />, { route: '/favorites' })
+  it('renders the FavoritesPage at /wishlist', () => {
+    renderWithProviders(<App />, { route: '/wishlist' })
     expect(
-      screen.getByRole('heading', { name: 'Favorites' }),
+      screen.getByRole('heading', { name: 'Wishlist' }),
     ).toBeInTheDocument()
   })
 

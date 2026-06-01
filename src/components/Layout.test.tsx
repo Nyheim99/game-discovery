@@ -10,7 +10,7 @@ function renderLayout(route = '/') {
     <Routes>
       <Route element={<Layout />}>
         <Route path="/" element={<p>Home page content</p>} />
-        <Route path="/favorites" element={<p>Favorites content</p>} />
+        <Route path="/wishlist" element={<p>Wishlist content</p>} />
       </Route>
     </Routes>,
     { route },
@@ -24,7 +24,7 @@ describe('Layout', () => {
     expect(
       screen.getByRole('link', { name: /game.*discovery/i }),
     ).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /favorites/i })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /wishlist/i })).toBeInTheDocument()
     expect(
       screen.getByRole('button', { name: /switch to .* mode/i }),
     ).toBeInTheDocument()
@@ -35,11 +35,11 @@ describe('Layout', () => {
     expect(screen.getByText('Home page content')).toBeInTheDocument()
   })
 
-  it('marks the Favorites link active on the favorites route', () => {
-    renderLayout('/favorites')
+  it('marks the Wishlist link active on the wishlist route', () => {
+    renderLayout('/wishlist')
 
     // NavLink adds aria-current="page" to the active link.
-    expect(screen.getByRole('link', { name: /favorites/i })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: /wishlist/i })).toHaveAttribute(
       'aria-current',
       'page',
     )

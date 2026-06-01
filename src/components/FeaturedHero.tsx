@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { FaHeart, FaRegHeart } from 'react-icons/fa'
+import FavoriteHeart from './FavoriteHeart'
 import type { Game } from '@/services/api-client'
 import { useFeaturedGame } from '@/hooks/useFeaturedGame'
 import { useGameDetails } from '@/hooks/useGameDetails'
@@ -72,12 +72,12 @@ function FeaturedHeroContent({ game }: { game: Game }) {
             aria-pressed={favorite}
             aria-label={
               favorite
-                ? `Remove ${game.name} from favorites`
-                : `Add ${game.name} to favorites`
+                ? `Remove ${game.name} from wishlist`
+                : `Add ${game.name} to wishlist`
             }
             onClick={() => toggleFavorite(game.id)}
           >
-            {favorite ? <FaHeart className="text-rose-500" /> : <FaRegHeart />}
+            <FavoriteHeart filled={favorite} filledClassName="text-rose-500" />
           </button>
         </div>
       </div>

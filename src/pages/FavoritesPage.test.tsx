@@ -13,7 +13,7 @@ describe('FavoritesPage', () => {
   it('shows an empty state when there are no favorites', () => {
     renderWithProviders(<FavoritesPage />)
 
-    expect(screen.getByText(/no favorites yet/i)).toBeInTheDocument()
+    expect(screen.getByText(/no games saved yet/i)).toBeInTheDocument()
   })
 
   it('fetches and renders a card for each saved favorite id', async () => {

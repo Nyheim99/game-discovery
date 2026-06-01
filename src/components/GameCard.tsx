@@ -1,22 +1,46 @@
 import { Link } from 'react-router-dom'
-import { FaHeart, FaRegHeart } from 'react-icons/fa'
+import { motion, useReducedMotion } from 'motion/react'
 import type { Game } from '@/services/api-client'
 import { getCroppedImageUrl } from '@/services/image-url'
 import { useFavorites } from '@/context/favorites-context'
 import CriticScore from './CriticScore'
+import FavoriteHeart from './FavoriteHeart'
 import PlatformIconList from './PlatformIconList'
 import noImagePlaceholder from '@/assets/no-image-placeholder.svg'
 
 interface Props {
   game: Game
+  // Position in the grid, used to stagger the entrance animation.
+  index?: number
 }
 
-function GameCard({ game }: Props) {
+function GameCard({ game, index = 0 }: Props) {
   const { isFavorite, toggleFavorite } = useFavorites()
   const favorite = isFavorite(game.id)
+  // Honour the OS "reduce motion" setting: a plain fade, no movement. One
+  // object so the fork is a single branch. Framer owns the transform (entrance
+  // + hover lift + tap), so the lift moved off CSS to avoid the two fighting
+  // over `transform`; border/shadow stay as CSS transitions.
+  const reduce = useReducedMotion()
+  const motionProps = reduce
+    ? {
+        initial: { opacity: 0 },
+        animate: { opacity: 1 },
+        transition: { duration: 0.25 },
+      }
+    : {
+        initial: { opacity: 0, y: 12 },
+        animate: { opacity: 1, y: 0 },
+        transition: { duration: 0.25, delay: Math.min(index, 10) * 0.03 },
+        whileHover: { y: -4 },
+        whileTap: { scale: 0.99 },
+      }
 
   return (
-    <div className="group relative overflow-hidden rounded-xl border border-border bg-surface transition duration-200 hover:-translate-y-1 hover:border-accent/40 hover:shadow-2xl hover:shadow-accent/20">
+    <motion.div
+      {...motionProps}
+      className="group relative h-full overflow-hidden rounded-xl border border-border bg-surface transition-[border-color,box-shadow] duration-200 hover:border-accent/40 hover:shadow-2xl hover:shadow-accent/20"
+    >
       {/* Frosted favorite button. Sibling of the Link (an <a> can't wrap a
           <button>); z-10 keeps it clickable above the link overlay. */}
       <button
@@ -24,12 +48,12 @@ function GameCard({ game }: Props) {
         aria-pressed={favorite}
         aria-label={
           favorite
-            ? `Remove ${game.name} from favorites`
-            : `Add ${game.name} to favorites`
+            ? `Remove ${game.name} from wishlist`
+            : `Add ${game.name} to wishlist`
         }
         onClick={() => toggleFavorite(game.id)}
       >
-        {favorite ? <FaHeart className="text-rose-500" /> : <FaRegHeart />}
+        <FavoriteHeart filled={favorite} filledClassName="text-rose-500" />
       </button>
 
       <Link to={`/games/${game.slug}`} className="block">
@@ -50,10 +74,14 @@ function GameCard({ game }: Props) {
             <PlatformIconList platforms={game.parent_platforms} />
             {game.metacritic ? <CriticScore score={game.metacritic} /> : null}
           </div>
-          <h2 className="font-display text-lg font-semibold">{game.name}</h2>
+          {/* Clamp to two lines and reserve that height so every card is the
+              same height regardless of title length. */}
+          <h2 className="line-clamp-2 min-h-[3.5rem] font-display text-lg font-semibold">
+            {game.name}
+          </h2>
         </div>
       </Link>
-    </div>
+    </motion.div>
   )
 }
 

@@ -1,3 +1,4 @@
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { FiX } from 'react-icons/fi'
 import type { GameQuery } from '@/services/api-client'
 import { useGenres } from '@/hooks/useGenres'
@@ -17,6 +18,16 @@ interface Chip {
 function ActiveFilters({ gameQuery, onClearGenre, onClearPlatform }: Props) {
   const { data: genres } = useGenres()
   const { data: platforms } = usePlatforms()
+  const reduce = useReducedMotion()
+  // One object so the reduced-motion fork is a single branch.
+  const chipMotion = reduce
+    ? { initial: { opacity: 0 }, animate: { opacity: 1 }, exit: { opacity: 0 } }
+    : {
+        layout: true,
+        initial: { opacity: 0, scale: 0.8 },
+        animate: { opacity: 1, scale: 1 },
+        exit: { opacity: 0, scale: 0.8 },
+      }
 
   // Look up human-readable names for the selected ids.
   const genreName = genres?.find((g) => g.id === gameQuery.genreId)?.name
@@ -41,22 +52,28 @@ function ActiveFilters({ gameQuery, onClearGenre, onClearPlatform }: Props) {
 
   return (
     <ul className="flex flex-wrap gap-2">
-      {chips.map((chip) => (
-        <li
-          key={chip.label}
-          className="flex items-center gap-2 rounded-full bg-surface-2 py-1 pr-1.5 pl-3 text-sm"
-        >
-          {chip.label}
-          <button
-            type="button"
-            aria-label={`Remove filter: ${chip.label}`}
-            onClick={chip.onRemove}
-            className="flex h-5 w-5 items-center justify-center rounded-full text-muted transition hover:bg-border hover:text-text"
+      {/* initial={false} so chips already present on first render don't animate
+          — only ones added/removed afterwards do. */}
+      <AnimatePresence initial={false}>
+        {chips.map((chip) => (
+          <motion.li
+            key={chip.label}
+            {...chipMotion}
+            transition={{ duration: 0.15 }}
+            className="flex items-center gap-2 rounded-full bg-surface-2 py-1 pr-1.5 pl-3 text-sm"
           >
-            <FiX size={14} />
-          </button>
-        </li>
-      ))}
+            {chip.label}
+            <button
+              type="button"
+              aria-label={`Remove filter: ${chip.label}`}
+              onClick={chip.onRemove}
+              className="flex h-5 w-5 items-center justify-center rounded-full text-muted transition hover:bg-border hover:text-text"
+            >
+              <FiX size={14} />
+            </button>
+          </motion.li>
+        ))}
+      </AnimatePresence>
     </ul>
   )
 }

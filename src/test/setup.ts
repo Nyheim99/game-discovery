@@ -17,6 +17,10 @@ Object.defineProperty(window, 'IntersectionObserver', {
   value: IntersectionObserverStub,
 })
 
+// jsdom doesn't implement scrollTo; Layout calls it to reset scroll on
+// navigation. A no-op stub keeps that from erroring in tests.
+window.scrollTo = () => {}
+
 // jsdom doesn't implement matchMedia, but ThemeProvider reads it on first
 // render to pick up the OS light/dark preference. Provide a minimal stub.
 Object.defineProperty(window, 'matchMedia', {

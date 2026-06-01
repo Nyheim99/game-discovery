@@ -100,12 +100,12 @@ describe('FeaturedHero', () => {
     renderWithProviders(<FeaturedHero />)
 
     const favoriteButton = screen.getByRole('button', {
-      name: 'Add Elden Ring to favorites',
+      name: 'Add Elden Ring to wishlist',
     })
     await user.click(favoriteButton)
 
     expect(
-      screen.getByRole('button', { name: 'Remove Elden Ring from favorites' }),
+      screen.getByRole('button', { name: 'Remove Elden Ring from wishlist' }),
     ).toBeInTheDocument()
   })
 })

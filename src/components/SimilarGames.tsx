@@ -19,8 +19,8 @@ function SimilarGames({ genreId, excludeId }: Props) {
     <section className="mt-8">
       <h2 className="mb-3 font-display text-xl font-semibold">Similar games</h2>
       <div className="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4">
-        {games.map((game) => (
-          <GameCard key={game.id} game={game} />
+        {games.map((game, index) => (
+          <GameCard key={game.id} game={game} index={index} />
         ))}
       </div>
     </section>

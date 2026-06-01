@@ -1,9 +1,9 @@
-import { useNavigate, useParams } from 'react-router-dom'
-import { FiArrowLeft } from 'react-icons/fi'
-import { FaHeart, FaRegHeart } from 'react-icons/fa'
+import { useParams } from 'react-router-dom'
 import { useGameDetails } from '@/hooks/useGameDetails'
 import { useFavorites } from '@/context/favorites-context'
+import BackButton from '@/components/BackButton'
 import CriticScore from '@/components/CriticScore'
+import FavoriteHeart from '@/components/FavoriteHeart'
 import GameDetailSkeleton from '@/components/GameDetailSkeleton'
 import GameMediaGallery from '@/components/GameMediaGallery'
 import PlatformIconList from '@/components/PlatformIconList'
@@ -16,7 +16,6 @@ function GameDetailPage() {
   // The "!" tells TypeScript "this is definitely present" — it always is,
   // because this page only renders when the URL matches that route.
   const { slug } = useParams<{ slug: string }>()
-  const navigate = useNavigate()
   const { isFavorite, toggleFavorite } = useFavorites()
   const { data: game, isLoading, isError } = useGameDetails(slug!)
 
@@ -62,15 +61,9 @@ function GameDetailPage() {
 
   return (
     <article>
-      {/* navigate(-1) goes back one entry in history — like the browser's
-          back button — so the user returns to wherever they came from. */}
-      <button
-        onClick={() => navigate(-1)}
-        className="mb-5 inline-flex items-center gap-2 rounded-lg bg-surface-2 px-4 py-2 text-sm font-medium transition hover:bg-border"
-      >
-        <FiArrowLeft size={16} />
-        Back
-      </button>
+      <div className="mb-5">
+        <BackButton />
+      </div>
 
       {/* Main column (gallery + description) on the left, info sidebar on the
           right. items-start so the columns align at the top and each sizes to
@@ -172,8 +165,8 @@ function GameDetailPage() {
                 aria-pressed={favorite}
                 className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-accent px-4 py-2.5 text-sm font-semibold text-white transition hover:opacity-90"
               >
-                {favorite ? <FaHeart /> : <FaRegHeart />}
-                {favorite ? 'In favorites' : 'Add to favorites'}
+                <FavoriteHeart filled={favorite} />
+                {favorite ? 'In wishlist' : 'Add to wishlist'}
               </button>
             </div>
           </div>

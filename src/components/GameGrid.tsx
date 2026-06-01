@@ -77,7 +77,9 @@ function GameGrid({ gameQuery }: Props) {
       <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-5">
         {isLoading
           ? skeletons.map((skeleton) => <GameCardSkeleton key={skeleton} />)
-          : games.map((game) => <GameCard key={game.id} game={game} />)}
+          : games.map((game, index) => (
+              <GameCard key={game.id} game={game} index={index} />
+            ))}
       </div>
 
       {hasNextPage && (

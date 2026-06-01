@@ -11,7 +11,7 @@
   --surface: #ffffff;
   --surface-2: #f4f4f5;
   --text: #18181b;
-  --muted: #71717a;
+  --muted: #52525b;
   --border: #e7e7ec;
   --accent: #6d4aff;
   --accent-contrast: #ffffff;
@@ -59,6 +59,17 @@ body {
    every enabled button app-wide. */
 button:not(:disabled) {
   cursor: pointer;
+}
+
+/* Subtle press feedback on every button — a quick scale-down on click. Skipped
+   entirely when the user asks the OS for reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  button:not(:disabled) {
+    transition: transform 0.1s ease;
+  }
+  button:not(:disabled):active {
+    transform: scale(0.97);
+  }
 }
 
 /* Hide the scrollbar on horizontal rails (e.g. the genre pill bar) while

@@ -133,9 +133,9 @@ describe('GameDetailPage', () => {
     expect(screen.queryByText('Одиночная')).not.toBeInTheDocument()
 
     // Toggling favorite flips the button's label.
-    await user.click(screen.getByRole('button', { name: /add to favorites/i }))
+    await user.click(screen.getByRole('button', { name: /add to wishlist/i }))
     expect(
-      screen.getByRole('button', { name: /in favorites/i }),
+      screen.getByRole('button', { name: /in wishlist/i }),
     ).toBeInTheDocument()
   })
 

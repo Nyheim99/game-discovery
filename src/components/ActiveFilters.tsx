@@ -5,7 +5,6 @@ import { usePlatforms } from '@/hooks/usePlatforms'
 
 interface Props {
   gameQuery: GameQuery
-  onClearSearch: () => void
   onClearGenre: () => void
   onClearPlatform: () => void
 }
@@ -15,12 +14,7 @@ interface Chip {
   onRemove: () => void
 }
 
-function ActiveFilters({
-  gameQuery,
-  onClearSearch,
-  onClearGenre,
-  onClearPlatform,
-}: Props) {
+function ActiveFilters({ gameQuery, onClearGenre, onClearPlatform }: Props) {
   const { data: genres } = useGenres()
   const { data: platforms } = usePlatforms()
 
@@ -30,14 +24,9 @@ function ActiveFilters({
     (p) => p.id === gameQuery.platformId,
   )?.name
 
-  // Build the list of chips to show from whatever filters are active.
+  // Build the list of chips to show from whatever filters are active. (Search
+  // isn't shown here — the search box keeps its own term and clear button.)
   const chips: Chip[] = []
-  if (gameQuery.searchText) {
-    chips.push({
-      label: `Search: ${gameQuery.searchText}`,
-      onRemove: onClearSearch,
-    })
-  }
   if (genreName) {
     chips.push({ label: `Genre: ${genreName}`, onRemove: onClearGenre })
   }

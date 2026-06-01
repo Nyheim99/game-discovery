@@ -1,44 +1,68 @@
-import { render, screen } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
+import { act } from 'react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import SearchInput from './SearchInput'
 
+const getInput = () => screen.getByRole('searchbox', { name: 'Search games' })
+
 describe('SearchInput', () => {
-  it('calls onSearch with the typed text when submitted', async () => {
-    const user = userEvent.setup()
+  beforeEach(() => vi.useFakeTimers())
+  afterEach(() => vi.useRealTimers())
+
+  it('seeds the field from the current search term', () => {
+    render(<SearchInput searchText="halo" onSearch={vi.fn()} />)
+
+    expect(getInput()).toHaveValue('halo')
+  })
+
+  it('searches as you type, but only after the debounce settles', () => {
     const onSearch = vi.fn()
-    render(<SearchInput onSearch={onSearch} />)
+    render(<SearchInput searchText="" onSearch={onSearch} />)
 
-    const input = screen.getByRole('searchbox', { name: 'Search games' })
-    await user.type(input, 'witcher{enter}')
+    fireEvent.change(getInput(), { target: { value: 'witcher' } })
+    // Nothing fires immediately — it waits for the typing to pause.
+    expect(onSearch).not.toHaveBeenCalled()
 
+    act(() => vi.advanceTimersByTime(400))
     expect(onSearch).toHaveBeenCalledWith('witcher')
   })
 
-  it('does not call onSearch until submitted', async () => {
-    const user = userEvent.setup()
+  it('searches immediately when submitted with Enter', () => {
     const onSearch = vi.fn()
-    render(<SearchInput onSearch={onSearch} />)
+    render(<SearchInput searchText="" onSearch={onSearch} />)
 
-    // Typing alone should not trigger a search (it happens on submit).
-    await user.type(
-      screen.getByRole('searchbox', { name: 'Search games' }),
-      'halo',
-    )
+    fireEvent.change(getInput(), { target: { value: 'halo' } })
+    fireEvent.submit(getInput().closest('form')!)
 
-    expect(onSearch).not.toHaveBeenCalled()
+    // No need to wait for the debounce.
+    expect(onSearch).toHaveBeenCalledWith('halo')
   })
 
-  it('calls onSearch with an empty string when submitted with no text', async () => {
-    const user = userEvent.setup()
+  it('clears the field and searches immediately via the clear button', () => {
     const onSearch = vi.fn()
-    render(<SearchInput onSearch={onSearch} />)
+    render(<SearchInput searchText="witcher" onSearch={onSearch} />)
 
-    // Focus the empty field and submit; the ?? '' fallback yields ''.
-    await user.type(
-      screen.getByRole('searchbox', { name: 'Search games' }),
-      '{enter}',
-    )
+    fireEvent.click(screen.getByRole('button', { name: 'Clear search' }))
 
+    expect(getInput()).toHaveValue('')
     expect(onSearch).toHaveBeenCalledWith('')
+  })
+
+  it('syncs the field when the term changes externally (e.g. going home)', () => {
+    const { rerender } = render(
+      <SearchInput searchText="witcher" onSearch={vi.fn()} />,
+    )
+    expect(getInput()).toHaveValue('witcher')
+
+    // The URL's search term is cleared from outside (not by typing here).
+    rerender(<SearchInput searchText="" onSearch={vi.fn()} />)
+    expect(getInput()).toHaveValue('')
+  })
+
+  it('has no clear button when the field is empty', () => {
+    render(<SearchInput searchText="" onSearch={vi.fn()} />)
+
+    expect(
+      screen.queryByRole('button', { name: 'Clear search' }),
+    ).not.toBeInTheDocument()
   })
 })

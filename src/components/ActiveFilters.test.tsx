@@ -21,23 +21,21 @@ const emptyQuery: GameQuery = {
   sortOrder: '',
 }
 
-// Helper to render with all three clear-callbacks stubbed, returning the spies
-// so a test can assert which one fired.
+// Helper to render with the clear-callbacks stubbed, returning the spies so a
+// test can assert which one fired.
 function renderFilters(query: GameQuery) {
-  const onClearSearch = vi.fn()
   const onClearGenre = vi.fn()
   const onClearPlatform = vi.fn()
 
   render(
     <ActiveFilters
       gameQuery={query}
-      onClearSearch={onClearSearch}
       onClearGenre={onClearGenre}
       onClearPlatform={onClearPlatform}
     />,
   )
 
-  return { onClearSearch, onClearGenre, onClearPlatform }
+  return { onClearGenre, onClearPlatform }
 }
 
 describe('ActiveFilters', () => {
@@ -56,7 +54,6 @@ describe('ActiveFilters', () => {
     const { container } = render(
       <ActiveFilters
         gameQuery={emptyQuery}
-        onClearSearch={vi.fn()}
         onClearGenre={vi.fn()}
         onClearPlatform={vi.fn()}
       />,
@@ -66,10 +63,17 @@ describe('ActiveFilters', () => {
     expect(container).toBeEmptyDOMElement()
   })
 
-  it('shows a chip for the active search term', () => {
-    renderFilters({ ...emptyQuery, searchText: 'witcher' })
+  it('does not show a chip for the search term (the search box owns it)', () => {
+    const { container } = render(
+      <ActiveFilters
+        gameQuery={{ ...emptyQuery, searchText: 'witcher' }}
+        onClearGenre={vi.fn()}
+        onClearPlatform={vi.fn()}
+      />,
+    )
 
-    expect(screen.getByText('Search: witcher')).toBeInTheDocument()
+    // Search alone produces no chips.
+    expect(container).toBeEmptyDOMElement()
   })
 
   it('shows a chip with the genre name looked up from the id', () => {
@@ -86,10 +90,10 @@ describe('ActiveFilters', () => {
 
   it('calls only the matching clear callback when a chip is removed', async () => {
     const user = userEvent.setup()
-    const { onClearGenre, onClearSearch, onClearPlatform } = renderFilters({
+    const { onClearGenre, onClearPlatform } = renderFilters({
       ...emptyQuery,
-      searchText: 'witcher',
       genreId: 4,
+      platformId: 1,
     })
 
     await user.click(
@@ -97,7 +101,6 @@ describe('ActiveFilters', () => {
     )
 
     expect(onClearGenre).toHaveBeenCalledOnce()
-    expect(onClearSearch).not.toHaveBeenCalled()
     expect(onClearPlatform).not.toHaveBeenCalled()
   })
 })

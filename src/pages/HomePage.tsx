@@ -38,6 +38,17 @@ function HomePage() {
     setSearchParams(params)
   }
 
+  // Searching starts a fresh browse: clear the genre/platform filters so the
+  // results aren't narrowed by stale selections. Clearing the search leaves
+  // any filters alone.
+  function handleSearch(searchText: string) {
+    updateQuery(
+      searchText
+        ? { searchText, genreId: null, platformId: null }
+        : { searchText },
+    )
+  }
+
   // The featured hero headlines the default view, but a big "featured game"
   // banner makes no sense over a search or filtered list — so hide it whenever
   // the user is actively narrowing results.
@@ -57,7 +68,10 @@ function HomePage() {
       {/* Toolbar: search grows to fill the row; the selects sit beside it. */}
       <div className="flex flex-wrap items-center gap-3">
         <div className="min-w-[240px] flex-1">
-          <SearchInput onSearch={(searchText) => updateQuery({ searchText })} />
+          <SearchInput
+            searchText={gameQuery.searchText}
+            onSearch={handleSearch}
+          />
         </div>
         <PlatformSelector
           selectedPlatformId={gameQuery.platformId}
@@ -71,7 +85,6 @@ function HomePage() {
 
       <ActiveFilters
         gameQuery={gameQuery}
-        onClearSearch={() => updateQuery({ searchText: '' })}
         onClearGenre={() => updateQuery({ genreId: null })}
         onClearPlatform={() => updateQuery({ platformId: null })}
       />

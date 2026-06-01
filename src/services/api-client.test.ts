@@ -78,6 +78,27 @@ describe('api-client', () => {
       expect(url.searchParams.get('ordering')).toBeNull()
     })
 
+    it('orders search results by popularity when no sort is chosen', async () => {
+      mockFetchOnce({ count: 0, next: null, results: [] })
+
+      await fetchGames({ ...emptyQuery, searchText: 'witcher' }, 1)
+
+      const url = calledUrl()
+      expect(url.searchParams.get('search')).toBe('witcher')
+      expect(url.searchParams.get('ordering')).toBe('-added')
+    })
+
+    it('keeps an explicit sort over the search-popularity default', async () => {
+      mockFetchOnce({ count: 0, next: null, results: [] })
+
+      await fetchGames(
+        { ...emptyQuery, searchText: 'witcher', sortOrder: 'name' },
+        1,
+      )
+
+      expect(calledUrl().searchParams.get('ordering')).toBe('name')
+    })
+
     it('rejects when the response is not ok', async () => {
       mockFetchOnce(null, false)
 

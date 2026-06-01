@@ -2,21 +2,21 @@
 
 **[🔗 Live demo](https://game-discovery-lime.vercel.app)** &nbsp;·&nbsp; [![CI](https://github.com/Nyheim99/game-discovery/actions/workflows/ci.yml/badge.svg)](https://github.com/Nyheim99/game-discovery/actions/workflows/ci.yml)
 
-A video game discovery app — browse games, filter by genre and platform, search, sort, and save favorites. Built with **React 19**, **TypeScript**, and **Vite**, using data from the [RAWG Video Games Database API](https://rawg.io/apidocs).
+A video game discovery app — browse games, filter by genre and platform, search, sort, and build a wishlist. Built with **React 19**, **TypeScript**, and **Vite**, using data from the [RAWG Video Games Database API](https://rawg.io/apidocs).
 
 > **A learning project.** I'm learning to code with **[Claude Code](https://claude.com/claude-code)** (Anthropic's CLI agent) as my pair programmer — building a real, full-featured app feature by feature, and using each step to actually understand modern React and the tooling around it, rather than just copying snippets. The commit history and pull requests are the story of that process.
 
 ## ✨ Features
 
-- **Browse & discover** games in a responsive card grid
-- **Game detail pages** with description, platforms, Metacritic score, and release date
+- **Browse & discover** games, led by a featured hero spotlight and a responsive card grid
+- **Rich game detail pages** — screenshot gallery, description, ratings breakdown, where to buy, and similar games
 - **Filter** by genre and by platform — filters live in the URL, so views are shareable
-- **Search** games by name
+- **Live search** — debounced as you type, with a clear button
 - **Sort** by rating, release date, name, and more
-- **Favorites** — star games, persisted across reloads, with a dedicated favorites page
+- **Wishlist** — save games, persisted across reloads, with a dedicated wishlist page
 - **Infinite scroll** for seamless browsing
 - **Dark / light theme** that respects your OS preference
-- **Rich cards** with Metacritic scores and platform icons
+- **Motion & micro-interactions** — page transitions, staggered cards, and tactile feedback (respects reduced-motion)
 - **Accessible** — keyboard- and screen-reader-friendly
 - Loading skeletons, image fallbacks, and removable filter chips
 
@@ -28,11 +28,14 @@ A video game discovery app — browse games, filter by genre and platform, searc
 | Language      | TypeScript                                                     |
 | Build tool    | Vite                                                           |
 | Routing       | React Router                                                   |
+| Styling       | Tailwind CSS                                                   |
 | Data fetching | TanStack Query (incl. infinite queries)                        |
+| Animation     | Framer Motion                                                  |
 | Icons         | react-icons                                                    |
 | Testing       | Vitest + React Testing Library (~100% coverage)                |
 | Quality       | ESLint + Prettier, with pre-commit hooks (Husky + lint-staged) |
 | CI            | GitHub Actions (lint, format, test, build on every PR)         |
+| Analytics     | Vercel Web Analytics + Speed Insights                          |
 | Hosting       | Vercel (auto-deploy from `main`, preview URLs per PR)          |
 
 ## 🚀 Getting started

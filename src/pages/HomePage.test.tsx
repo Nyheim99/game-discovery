@@ -64,7 +64,10 @@ describe('HomePage', () => {
 
     // The genre id 4 is resolved to its name via the (mocked) genres list.
     expect(screen.getByText('Genre: Action')).toBeInTheDocument()
-    expect(screen.getByText('Search: witcher')).toBeInTheDocument()
+    // The search term seeds the search box (it has no chip of its own).
+    expect(screen.getByRole('searchbox', { name: 'Search games' })).toHaveValue(
+      'witcher',
+    )
   })
 
   it('writes the chosen genre into the URL', async () => {
@@ -76,17 +79,14 @@ describe('HomePage', () => {
     expect(screen.getByTestId('search')).toHaveTextContent('genres=4')
   })
 
-  it('removes a filter from the URL when its chip is cleared', async () => {
+  it('clears the search from the URL via the clear button', async () => {
     const user = userEvent.setup()
     renderHomePage('/?search=witcher')
 
-    await user.click(
-      screen.getByRole('button', { name: 'Remove filter: Search: witcher' }),
-    )
+    await user.click(screen.getByRole('button', { name: 'Clear search' }))
 
-    // With the only filter cleared, the query string is empty again.
+    // With the search cleared, the query string is empty again.
     expect(screen.getByTestId('search')).toHaveTextContent('')
-    expect(screen.queryByText('Search: witcher')).not.toBeInTheDocument()
   })
 
   it('writes a submitted search term to the URL', async () => {

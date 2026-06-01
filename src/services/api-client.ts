@@ -150,6 +150,11 @@ export function fetchGames(
   }
   if (query.sortOrder) {
     params.ordering = query.sortOrder
+  } else if (query.searchText) {
+    // No explicit sort while searching: order matches by popularity (how many
+    // users have added the game) so big titles beat obscure exact-name hits,
+    // instead of RAWG's default relevance ranking.
+    params.ordering = '-added'
   }
 
   return fetchData<Game>('/games', params)

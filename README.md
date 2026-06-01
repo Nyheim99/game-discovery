@@ -30,7 +30,7 @@ A video game discovery app — browse games, filter by genre and platform, searc
 | Routing       | React Router                                                   |
 | Data fetching | TanStack Query (incl. infinite queries)                        |
 | Icons         | react-icons                                                    |
-| Testing       | Vitest + React Testing Library                                 |
+| Testing       | Vitest + React Testing Library (~100% coverage)                |
 | Quality       | ESLint + Prettier, with pre-commit hooks (Husky + lint-staged) |
 | CI            | GitHub Actions (lint, format, test, build on every PR)         |
 | Hosting       | Vercel (auto-deploy from `main`, preview URLs per PR)          |
@@ -53,13 +53,14 @@ Then open the URL Vite prints (default http://localhost:5173).
 
 ### Useful scripts
 
-| Script           | What it does                        |
-| ---------------- | ----------------------------------- |
-| `npm run dev`    | Start the dev server                |
-| `npm run build`  | Type-check and build for production |
-| `npm run test`   | Run tests in watch mode             |
-| `npm run lint`   | Lint the codebase                   |
-| `npm run format` | Format the codebase with Prettier   |
+| Script                  | What it does                          |
+| ----------------------- | ------------------------------------- |
+| `npm run dev`           | Start the dev server                  |
+| `npm run build`         | Type-check and build for production   |
+| `npm run test`          | Run tests in watch mode               |
+| `npm run test:coverage` | Run tests once with a coverage report |
+| `npm run lint`          | Lint the codebase                     |
+| `npm run format`        | Format the codebase with Prettier     |
 
 ## 📚 What I'm learning
 

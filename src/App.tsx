@@ -1,4 +1,5 @@
 import { Route, Routes } from 'react-router-dom'
+import { Analytics } from '@vercel/analytics/react'
 import Layout from '@/components/Layout'
 import HomePage from '@/pages/HomePage'
 import GameDetailPage from '@/pages/GameDetailPage'
@@ -13,14 +14,17 @@ import NotFoundPage from '@/pages/NotFoundPage'
 //   "*"             -> NotFoundPage (any URL that matches nothing above)
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route index element={<HomePage />} />
-        <Route path="games/:slug" element={<GameDetailPage />} />
-        <Route path="favorites" element={<FavoritesPage />} />
-        <Route path="*" element={<NotFoundPage />} />
-      </Route>
-    </Routes>
+    <>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<HomePage />} />
+          <Route path="games/:slug" element={<GameDetailPage />} />
+          <Route path="favorites" element={<FavoritesPage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Route>
+      </Routes>
+      <Analytics />
+    </>
   )
 }
 

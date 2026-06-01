@@ -16,5 +16,20 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: './src/test/setup.ts',
+    coverage: {
+      provider: 'v8',
+      // Text summary in the terminal; html for a browsable report in coverage/.
+      reporter: ['text', 'html'],
+      // Only measure our own source. Exclude entry/config/type-only files and
+      // the test helpers themselves — they'd otherwise dilute the numbers.
+      include: ['src/**/*.{ts,tsx}'],
+      exclude: [
+        'src/**/*.test.{ts,tsx}',
+        'src/test/**',
+        'src/main.tsx',
+        'src/Providers.tsx',
+        'src/vite-env.d.ts',
+      ],
+    },
   },
 })

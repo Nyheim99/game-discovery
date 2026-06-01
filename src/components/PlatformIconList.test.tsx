@@ -20,4 +20,19 @@ describe('PlatformIconList', () => {
     expect(screen.getByTitle('PC')).toBeInTheDocument()
     expect(screen.getByTitle('PlayStation')).toBeInTheDocument()
   })
+
+  it('skips platforms it has no icon for', () => {
+    render(
+      <PlatformIconList
+        platforms={[
+          { platform: { id: 1, name: 'PC', slug: 'pc' } },
+          // An unknown slug has no entry in the icon map and is dropped.
+          { platform: { id: 99, name: 'Atari', slug: 'atari' } },
+        ]}
+      />,
+    )
+
+    expect(screen.getByTitle('PC')).toBeInTheDocument()
+    expect(screen.queryByTitle('Atari')).not.toBeInTheDocument()
+  })
 })

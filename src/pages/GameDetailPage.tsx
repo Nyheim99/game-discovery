@@ -8,7 +8,6 @@ import GameDetailSkeleton from '@/components/GameDetailSkeleton'
 import GameMediaGallery from '@/components/GameMediaGallery'
 import PlatformIconList from '@/components/PlatformIconList'
 import RatingBreakdown from '@/components/RatingBreakdown'
-import SimilarGames from '@/components/SimilarGames'
 import WhereToBuy from '@/components/WhereToBuy'
 
 function GameDetailPage() {
@@ -38,22 +37,25 @@ function GameDetailPage() {
 
   const favorite = isFavorite(game.id)
 
-  // Derive the simple label/value facts from whatever the API gave us, so the
-  // info card just maps over a list instead of repeating markup per field.
-  const facts: { label: string; value: string }[] = []
-  if (game.released) facts.push({ label: 'Release date', value: game.released })
-  if (game.developers?.length)
-    facts.push({
-      label: game.developers.length > 1 ? 'Developers' : 'Developer',
-      value: game.developers.map((d) => d.name).join(', '),
-    })
-  if (game.publishers?.length)
-    facts.push({
-      label: game.publishers.length > 1 ? 'Publishers' : 'Publisher',
-      value: game.publishers.map((p) => p.name).join(', '),
-    })
-  if (game.esrb_rating)
-    facts.push({ label: 'ESRB', value: game.esrb_rating.name })
+  // The info-card facts. Every game shows the same rows for a stable layout;
+  // a missing value falls back to a placeholder rather than dropping the row,
+  // so users always find the field where they expect it.
+  const facts: { label: string; value: string }[] = [
+    { label: 'Release date', value: game.released || 'Unknown' },
+    {
+      label: (game.developers?.length ?? 0) > 1 ? 'Developers' : 'Developer',
+      value: game.developers?.length
+        ? game.developers.map((d) => d.name).join(', ')
+        : 'Unknown',
+    },
+    {
+      label: (game.publishers?.length ?? 0) > 1 ? 'Publishers' : 'Publisher',
+      value: game.publishers?.length
+        ? game.publishers.map((p) => p.name).join(', ')
+        : 'Unknown',
+    },
+    { label: 'ESRB', value: game.esrb_rating?.name ?? 'Not rated' },
+  ]
 
   // RAWG returns tags in many languages; keep the English ones and cap the list.
   const tags =
@@ -175,8 +177,6 @@ function GameDetailPage() {
           <WhereToBuy slug={game.slug} stores={game.stores} />
         </aside>
       </div>
-
-      <SimilarGames genreId={game.genres?.[0]?.id} excludeId={game.id} />
     </article>
   )
 }

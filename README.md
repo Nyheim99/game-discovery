@@ -9,7 +9,7 @@ A video game discovery app — browse games, filter by genre and platform, searc
 ## ✨ Features
 
 - **Browse & discover** games, led by a featured hero spotlight and a responsive card grid
-- **Rich game detail pages** — screenshot gallery, description, ratings breakdown, where to buy, and similar games
+- **Rich game detail pages** — screenshot gallery, description, ratings breakdown, and where to buy
 - **Filter** by genre and by platform — filters live in the URL, so views are shareable
 - **Live search** — debounced as you type, with a clear button
 - **Sort** by rating, release date, name, and more

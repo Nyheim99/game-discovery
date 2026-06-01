@@ -119,10 +119,10 @@ describe('HomePage', () => {
 
     await user.selectOptions(
       screen.getByRole('combobox', { name: 'Order games by' }),
-      'Order by: Name',
+      'Order by: Average rating',
     )
 
-    expect(screen.getByTestId('search')).toHaveTextContent('ordering=name')
+    expect(screen.getByTestId('search')).toHaveTextContent('ordering=-rating')
   })
 
   it('clears the genre filter when its chip is removed', async () => {

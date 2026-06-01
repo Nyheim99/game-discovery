@@ -4,11 +4,11 @@ import SortSelector from './SortSelector'
 
 describe('SortSelector', () => {
   it('reflects the current sortOrder as the selected option', () => {
-    render(<SortSelector sortOrder="-released" onChangeSortOrder={vi.fn()} />)
+    render(<SortSelector sortOrder="-metacritic" onChangeSortOrder={vi.fn()} />)
 
     // A controlled <select> shows the option whose value matches the prop.
     const select = screen.getByRole('combobox', { name: 'Order games by' })
-    expect(select).toHaveValue('-released')
+    expect(select).toHaveValue('-metacritic')
   })
 
   it('calls onChangeSortOrder with the chosen option value', async () => {

@@ -1,6 +1,9 @@
 import { useEffect, useRef } from 'react'
 import { useGames } from '@/hooks/useGames'
+import { useGenres } from '@/hooks/useGenres'
+import { usePlatforms } from '@/hooks/usePlatforms'
 import type { GameQuery } from '@/services/api-client'
+import { buildResultsLabel } from '@/services/results-label'
 import GameCard from './GameCard'
 import GameCardSkeleton from './GameCardSkeleton'
 
@@ -49,6 +52,21 @@ function GameGrid({ gameQuery }: Props) {
   // Total number of matching games (RAWG sends this on each page).
   const totalCount = data?.pages[0]?.count ?? 0
 
+  // The status line above the grid. Resolve the active genre/platform ids to
+  // names (from the cached lists) so a filtered browse can describe itself,
+  // e.g. "Top-rated Action games on PC". See buildResultsLabel for the wording.
+  const { data: genres } = useGenres()
+  const { data: platforms } = usePlatforms()
+  const genreName = genres?.find((g) => g.id === gameQuery.genreId)?.name
+  const platformName = platforms?.find(
+    (p) => p.id === gameQuery.platformId,
+  )?.name
+  const resultsLabel = buildResultsLabel(
+    gameQuery,
+    { genreName, platformName },
+    totalCount,
+  )
+
   if (error)
     return (
       <p role="alert" className="py-10 text-center text-red-400">
@@ -70,7 +88,7 @@ function GameGrid({ gameQuery }: Props) {
         </p>
       ) : (
         <p className="text-muted" role="status">
-          {totalCount.toLocaleString()} games found
+          {resultsLabel}
         </p>
       )}
 

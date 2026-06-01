@@ -2,9 +2,23 @@ import { screen } from '@testing-library/react'
 import { renderWithProviders } from '@/test/test-utils'
 import GameGrid from './GameGrid'
 import { useGames } from '@/hooks/useGames'
+import { useGenres } from '@/hooks/useGenres'
+import { usePlatforms } from '@/hooks/usePlatforms'
 import type { GameQuery, Game } from '@/services/api-client'
 
 vi.mock('@/hooks/useGames')
+vi.mock('@/hooks/useGenres')
+vi.mock('@/hooks/usePlatforms')
+
+beforeEach(() => {
+  // Name lookups for the heading; ids 4 → Action, 1 → PC.
+  vi.mocked(useGenres).mockReturnValue({
+    data: [{ id: 4, name: 'Action', image_background: '' }],
+  } as unknown as ReturnType<typeof useGenres>)
+  vi.mocked(usePlatforms).mockReturnValue({
+    data: [{ id: 1, name: 'PC', slug: 'pc' }],
+  } as unknown as ReturnType<typeof usePlatforms>)
+})
 
 const query: GameQuery = {
   genreId: null,
@@ -67,13 +81,41 @@ describe('GameGrid', () => {
     expect(screen.getByText('No games found.')).toBeInTheDocument()
   })
 
-  it('renders the total count and a card per game', () => {
+  it('describes a filtered/sorted browse and renders a card per game', () => {
+    mockGames({ data: pages([game], 42) })
+
+    renderWithProviders(
+      <GameGrid
+        gameQuery={{
+          genreId: 4,
+          platformId: 1,
+          searchText: '',
+          sortOrder: '-rating',
+        }}
+      />,
+    )
+
+    expect(screen.getByText('Top-rated Action games on PC')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Celeste' })).toBeInTheDocument()
+  })
+
+  it('shows "Popular right now" on the bare default feed (no raw count)', () => {
     mockGames({ data: pages([game], 42) })
 
     renderWithProviders(<GameGrid gameQuery={query} />)
 
-    expect(screen.getByText('42 games found')).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: 'Celeste' })).toBeInTheDocument()
+    expect(screen.getByText('Popular right now')).toBeInTheDocument()
+    expect(screen.queryByText(/games found/)).not.toBeInTheDocument()
+  })
+
+  it('reports the result count when searching', () => {
+    mockGames({ data: pages([game], 42) })
+
+    renderWithProviders(
+      <GameGrid gameQuery={{ ...query, searchText: 'celeste' }} />,
+    )
+
+    expect(screen.getByText('42 results for “celeste”')).toBeInTheDocument()
   })
 
   it('shows a "Loading more…" indicator while fetching the next page', () => {

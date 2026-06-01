@@ -11,7 +11,7 @@ function SearchInput({ onSearch }: Props) {
   }
 
   return (
-    <form action={handleSubmit} role="search" className="mb-6">
+    <form action={handleSubmit} role="search">
       <div className="relative">
         <FiSearch
           size={18}

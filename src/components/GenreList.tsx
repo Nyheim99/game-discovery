@@ -5,44 +5,49 @@ interface Props {
   onSelectGenre: (genreId: number | null) => void
 }
 
-// Shared button styling; the selected genre gets an unmistakable accent pill.
-function itemClass(selected: boolean) {
-  const base = 'w-full rounded-lg px-3 py-2 text-left text-sm transition'
+// Shared pill styling; the selected genre gets an unmistakable accent fill.
+function pillClass(selected: boolean) {
+  const base =
+    'shrink-0 whitespace-nowrap rounded-full border px-4 py-1.5 text-sm font-medium transition'
   return selected
-    ? `${base} bg-accent/15 font-semibold text-accent`
-    : `${base} text-muted hover:bg-surface-2 hover:text-text`
+    ? `${base} border-accent bg-accent text-white`
+    : `${base} border-border bg-surface text-muted hover:border-accent/40 hover:text-text`
 }
 
 function GenreList({ selectedGenreId, onSelectGenre }: Props) {
   const { data: genres, error, isLoading } = useGenres()
 
-  // If genres fail to load, just hide the list rather than break the page.
+  // If genres fail to load, just hide the bar rather than break the page.
   if (error) return null
 
-  // Reserve the list's space while loading so the content below it doesn't
-  // jump when the genres arrive (this was the main layout-shift culprit).
+  // Reserve the bar's space while loading so the content below it doesn't jump
+  // when the genres arrive.
   if (isLoading) {
     return (
-      <>
-        <h2 className="mb-3 font-display text-lg font-semibold">Genres</h2>
-        <ul className="space-y-1" aria-hidden="true">
-          {Array.from({ length: 19 }, (_, i) => i).map((i) => (
-            <li key={i} className="px-3 py-2">
-              <div className="h-5 w-full animate-pulse rounded bg-surface-2" />
-            </li>
+      <section>
+        <h2 className="sr-only">Genres</h2>
+        <div
+          className="no-scrollbar flex gap-2 overflow-x-auto pb-1"
+          aria-hidden="true"
+        >
+          {Array.from({ length: 12 }, (_, i) => i).map((i) => (
+            <div
+              key={i}
+              className="h-8 w-24 shrink-0 animate-pulse rounded-full bg-surface-2"
+            />
           ))}
-        </ul>
-      </>
+        </div>
+      </section>
     )
   }
 
   return (
-    <>
-      <h2 className="mb-3 font-display text-lg font-semibold">Genres</h2>
-      <ul className="space-y-1">
+    <nav aria-label="Genres">
+      <h2 className="sr-only">Genres</h2>
+      <ul className="no-scrollbar flex gap-2 overflow-x-auto pb-1">
         <li>
           <button
-            className={itemClass(selectedGenreId === null)}
+            className={pillClass(selectedGenreId === null)}
             aria-pressed={selectedGenreId === null}
             onClick={() => onSelectGenre(null)}
           >
@@ -52,7 +57,7 @@ function GenreList({ selectedGenreId, onSelectGenre }: Props) {
         {genres?.map((genre) => (
           <li key={genre.id}>
             <button
-              className={itemClass(genre.id === selectedGenreId)}
+              className={pillClass(genre.id === selectedGenreId)}
               aria-pressed={genre.id === selectedGenreId}
               onClick={() => onSelectGenre(genre.id)}
             >
@@ -61,7 +66,7 @@ function GenreList({ selectedGenreId, onSelectGenre }: Props) {
           </li>
         ))}
       </ul>
-    </>
+    </nav>
   )
 }
 

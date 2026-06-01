@@ -1,13 +1,14 @@
 import { useSearchParams } from 'react-router-dom'
 import type { GameQuery } from '@/services/api-client'
 import ActiveFilters from '@/components/ActiveFilters'
+import FeaturedHero from '@/components/FeaturedHero'
 import GameGrid from '@/components/GameGrid'
 import GenreList from '@/components/GenreList'
 import PlatformSelector from '@/components/PlatformSelector'
 import SearchInput from '@/components/SearchInput'
 import SortSelector from '@/components/SortSelector'
 
-// The discovery view. The filters now live in the URL's query string
+// The discovery view. The filters live in the URL's query string
 // (e.g. /?genres=4&search=witcher) instead of component state, so a filtered
 // view survives navigation/refresh and can be bookmarked or shared.
 function HomePage() {
@@ -37,37 +38,46 @@ function HomePage() {
     setSearchParams(params)
   }
 
+  // The featured hero headlines the default view, but a big "featured game"
+  // banner makes no sense over a search or filtered list — so hide it whenever
+  // the user is actively narrowing results.
+  const isFiltering = Boolean(
+    gameQuery.genreId || gameQuery.platformId || gameQuery.searchText,
+  )
+
   return (
-    <>
-      <SearchInput onSearch={(searchText) => updateQuery({ searchText })} />
-      <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
-        <aside className="shrink-0 lg:w-52">
-          <GenreList
-            selectedGenreId={gameQuery.genreId}
-            onSelectGenre={(genreId) => updateQuery({ genreId })}
-          />
-        </aside>
-        <main className="min-w-0 flex-1">
-          <div className="mb-5 flex flex-wrap gap-3">
-            <PlatformSelector
-              selectedPlatformId={gameQuery.platformId}
-              onSelectPlatform={(platformId) => updateQuery({ platformId })}
-            />
-            <SortSelector
-              sortOrder={gameQuery.sortOrder}
-              onChangeSortOrder={(sortOrder) => updateQuery({ sortOrder })}
-            />
-          </div>
-          <ActiveFilters
-            gameQuery={gameQuery}
-            onClearSearch={() => updateQuery({ searchText: '' })}
-            onClearGenre={() => updateQuery({ genreId: null })}
-            onClearPlatform={() => updateQuery({ platformId: null })}
-          />
-          <GameGrid gameQuery={gameQuery} />
-        </main>
+    <div className="flex flex-col gap-6">
+      {!isFiltering && <FeaturedHero />}
+
+      <GenreList
+        selectedGenreId={gameQuery.genreId}
+        onSelectGenre={(genreId) => updateQuery({ genreId })}
+      />
+
+      {/* Toolbar: search grows to fill the row; the selects sit beside it. */}
+      <div className="flex flex-wrap items-center gap-3">
+        <div className="min-w-[240px] flex-1">
+          <SearchInput onSearch={(searchText) => updateQuery({ searchText })} />
+        </div>
+        <PlatformSelector
+          selectedPlatformId={gameQuery.platformId}
+          onSelectPlatform={(platformId) => updateQuery({ platformId })}
+        />
+        <SortSelector
+          sortOrder={gameQuery.sortOrder}
+          onChangeSortOrder={(sortOrder) => updateQuery({ sortOrder })}
+        />
       </div>
-    </>
+
+      <ActiveFilters
+        gameQuery={gameQuery}
+        onClearSearch={() => updateQuery({ searchText: '' })}
+        onClearGenre={() => updateQuery({ genreId: null })}
+        onClearPlatform={() => updateQuery({ platformId: null })}
+      />
+
+      <GameGrid gameQuery={gameQuery} />
+    </div>
   )
 }
 

@@ -51,7 +51,7 @@ function ActiveFilters({
   if (chips.length === 0) return null
 
   return (
-    <ul className="mb-4 flex flex-wrap gap-2">
+    <ul className="flex flex-wrap gap-2">
       {chips.map((chip) => (
         <li
           key={chip.label}

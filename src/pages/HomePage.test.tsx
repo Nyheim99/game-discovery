@@ -6,10 +6,12 @@ import HomePage from './HomePage'
 import { useGames } from '@/hooks/useGames'
 import { useGenres } from '@/hooks/useGenres'
 import { usePlatforms } from '@/hooks/usePlatforms'
+import { useFeaturedGame } from '@/hooks/useFeaturedGame'
 
 vi.mock('@/hooks/useGames')
 vi.mock('@/hooks/useGenres')
 vi.mock('@/hooks/usePlatforms')
+vi.mock('@/hooks/useFeaturedGame')
 
 // Renders the current query string so tests can assert HomePage wrote the URL.
 function LocationEcho() {
@@ -38,6 +40,13 @@ beforeEach(() => {
     data: [{ id: 1, name: 'PC', slug: 'pc' }],
     error: null,
   } as unknown as ReturnType<typeof usePlatforms>)
+
+  // Keep the featured hero out of these tests — they focus on the filters.
+  // With no featured game, the hero renders nothing.
+  vi.mocked(useFeaturedGame).mockReturnValue({
+    data: undefined,
+    isLoading: false,
+  } as unknown as ReturnType<typeof useFeaturedGame>)
 
   vi.mocked(useGames).mockReturnValue({
     data: { pages: [{ count: 0, next: null, results: [] }], pageParams: [1] },

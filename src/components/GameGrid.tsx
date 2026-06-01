@@ -8,7 +8,9 @@ interface Props {
   gameQuery: GameQuery
 }
 
-const skeletons = [1, 2, 3, 4, 5, 6]
+// Enough placeholders to fill the full-width grid's first couple of rows while
+// the real games load.
+const skeletons = Array.from({ length: 12 }, (_, i) => i)
 
 function GameGrid({ gameQuery }: Props) {
   const {
@@ -67,7 +69,7 @@ function GameGrid({ gameQuery }: Props) {
           Loading games…
         </p>
       ) : (
-        <p className="mb-4 text-muted" role="status">
+        <p className="text-muted" role="status">
           {totalCount.toLocaleString()} games found
         </p>
       )}

@@ -1,6 +1,6 @@
 # 🎮 Game Discovery
 
-**[🔗 Live demo](https://game-discovery-nyheim99s-projects.vercel.app)** &nbsp;·&nbsp; [![CI](https://github.com/Nyheim99/game-discovery/actions/workflows/ci.yml/badge.svg)](https://github.com/Nyheim99/game-discovery/actions/workflows/ci.yml)
+**[🔗 Live demo](https://game-discovery-lime.vercel.app)** &nbsp;·&nbsp; [![CI](https://github.com/Nyheim99/game-discovery/actions/workflows/ci.yml/badge.svg)](https://github.com/Nyheim99/game-discovery/actions/workflows/ci.yml)
 
 A video game discovery app — browse games, filter by genre and platform, search, sort, and save favorites. Built with **React 19**, **TypeScript**, and **Vite**, using data from the [RAWG Video Games Database API](https://rawg.io/apidocs).
 

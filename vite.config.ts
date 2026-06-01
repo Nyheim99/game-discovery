@@ -30,6 +30,16 @@ export default defineConfig({
         'src/Providers.tsx',
         'src/vite-env.d.ts',
       ],
+      // Fail the run (and therefore CI) if coverage drops below these floors.
+      // We currently sit at ~100%, so these are a regression guard with some
+      // headroom — not a chase-the-number target. Raise them deliberately if
+      // we want a tighter ratchet later.
+      thresholds: {
+        statements: 90,
+        branches: 90,
+        functions: 90,
+        lines: 90,
+      },
     },
   },
 })

@@ -40,8 +40,10 @@ jobs:
       - name: Lint
         run: npm run lint
 
-      - name: Run tests
-        run: npm run test:run
+      # Runs the suite with coverage; the thresholds in vite.config.ts make this
+      # fail if coverage regresses below the configured floor.
+      - name: Run tests with coverage
+        run: npm run test:coverage
 
       # `npm run build` is `tsc -b && vite build`, so this also type-checks.
       - name: Build

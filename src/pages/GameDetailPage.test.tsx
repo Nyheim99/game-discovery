@@ -3,9 +3,22 @@ import userEvent from '@testing-library/user-event'
 import { Route, Routes } from 'react-router-dom'
 import { renderWithProviders } from '@/test/test-utils'
 import GameDetailPage from './GameDetailPage'
-import { fetchGameDetails } from '@/services/api-client'
+import {
+  fetchGameDetails,
+  fetchGames,
+  fetchScreenshots,
+  fetchGameStores,
+} from '@/services/api-client'
 
 vi.mock('@/services/api-client')
+
+// The detail page also renders the gallery, "where to buy" and "similar games"
+// sections; keep their data empty so these tests stay focused on the details.
+beforeEach(() => {
+  vi.mocked(fetchScreenshots).mockResolvedValue([])
+  vi.mocked(fetchGameStores).mockResolvedValue([])
+  vi.mocked(fetchGames).mockResolvedValue({ count: 0, next: null, results: [] })
+})
 
 // Spy on navigation so we can assert the Back button without a real history.
 const navigateMock = vi.fn()
@@ -57,7 +70,7 @@ describe('GameDetailPage', () => {
       await screen.findByRole('heading', { name: 'Celeste' }),
     ).toBeInTheDocument()
     expect(screen.getByText(/mountain-climbing/i)).toBeInTheDocument()
-    expect(screen.getByText('Released 2018-01-25')).toBeInTheDocument()
+    expect(screen.getByText('2018-01-25')).toBeInTheDocument()
     expect(
       screen.getByRole('link', { name: /official website/i }),
     ).toHaveAttribute('href', 'https://www.celestegame.com')
@@ -87,6 +100,42 @@ describe('GameDetailPage', () => {
 
     expect(
       await screen.findByText(/couldn’t load this game/i),
+    ).toBeInTheDocument()
+  })
+
+  it('lists the genres and other facts, and lets you favorite the game', async () => {
+    const user = userEvent.setup()
+    vi.mocked(fetchGameDetails).mockResolvedValue({
+      ...fullGame,
+      genres: [{ id: 4, name: 'Platformer', slug: 'platformer' }],
+      developers: [
+        { id: 1, name: 'Maddy Makes Games', slug: 'mmg' },
+        { id: 2, name: 'Extremely OK', slug: 'eok' },
+      ],
+      publishers: [{ id: 3, name: 'Some Publisher', slug: 'some-publisher' }],
+      esrb_rating: { id: 1, name: 'Everyone 10+', slug: 'everyone-10-plus' },
+      tags: [
+        { id: 7, name: 'Singleplayer', slug: 'singleplayer', language: 'eng' },
+        { id: 8, name: 'Одиночная', slug: 'odinochnaya', language: 'rus' },
+      ],
+    })
+
+    renderDetail()
+
+    expect(await screen.findByText('Platformer')).toBeInTheDocument()
+    // Plural vs singular labels, plus the other API facts.
+    expect(screen.getByText('Developers')).toBeInTheDocument()
+    expect(screen.getByText('Publisher')).toBeInTheDocument()
+    expect(screen.getByText('Some Publisher')).toBeInTheDocument()
+    expect(screen.getByText('Everyone 10+')).toBeInTheDocument()
+    // English tags show; non-English ones are filtered out.
+    expect(screen.getByText('Singleplayer')).toBeInTheDocument()
+    expect(screen.queryByText('Одиночная')).not.toBeInTheDocument()
+
+    // Toggling favorite flips the button's label.
+    await user.click(screen.getByRole('button', { name: /add to favorites/i }))
+    expect(
+      screen.getByRole('button', { name: /in favorites/i }),
     ).toBeInTheDocument()
   })
 

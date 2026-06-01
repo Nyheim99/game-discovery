@@ -56,18 +56,74 @@ export interface Game {
   parent_platforms?: ParentPlatform[]
 }
 
+// A named, slugged entity as it appears on a game's detail object — genres,
+// developers, publishers all share this shape.
+export interface NamedEntity {
+  id: number
+  name: string
+  slug: string
+}
+
+// A descriptor tag (e.g. "Singleplayer", "Atmospheric"). RAWG returns tags in
+// several languages, so `language` lets us keep just the English ones.
+export interface Tag {
+  id: number
+  name: string
+  slug: string
+  language: string
+}
+
+// One slice of the user-rating breakdown (e.g. "exceptional", 80%).
+export interface Rating {
+  id: number
+  title: string
+  count: number
+  percent: number
+}
+
 // The detail endpoint returns everything a Game has, plus richer fields we
-// only need on the detail page.
+// only need on the detail page. These extras are optional to be safe.
 export interface GameDetails extends Game {
   description_raw: string
   released: string | null
   website: string
+  genres?: NamedEntity[]
+  developers?: NamedEntity[]
+  publishers?: NamedEntity[]
+  esrb_rating?: NamedEntity | null
+  tags?: Tag[]
+  ratings?: Rating[]
+  // The detail object lists the stores (names) but not the buy URLs — those
+  // come from the /stores sub-endpoint, joined on the store id.
+  stores?: { store: NamedEntity }[]
 }
 
 // The detail endpoint (/games/{slug}) returns a single game object — NOT the
 // list wrapper — so we ask fetchFromRawg for a GameDetails directly.
 export function fetchGameDetails(slug: string): Promise<GameDetails> {
   return fetchFromRawg<GameDetails>(`/games/${slug}`)
+}
+
+// One screenshot of a game.
+export interface Screenshot {
+  id: number
+  image: string
+}
+
+export async function fetchScreenshots(slug: string): Promise<Screenshot[]> {
+  const data = await fetchData<Screenshot>(`/games/${slug}/screenshots`)
+  return data.results
+}
+
+// A buy link: which store (by id) and the URL for this game in it.
+export interface StoreLink {
+  store_id: number
+  url: string
+}
+
+export async function fetchGameStores(slug: string): Promise<StoreLink[]> {
+  const data = await fetchData<StoreLink>(`/games/${slug}/stores`)
+  return data.results
 }
 
 // Everything the user can ask for, bundled into one object.

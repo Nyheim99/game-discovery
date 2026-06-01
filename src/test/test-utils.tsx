@@ -32,3 +32,18 @@ export function renderWithProviders(
 
   return render(ui, { wrapper: Wrapper })
 }
+
+// A lighter wrapper for testing hooks in isolation with renderHook: just a
+// QueryClientProvider (most of our custom hooks wrap TanStack Query). Each call
+// gets a fresh client so cache never bleeds between tests.
+export function createQueryWrapper() {
+  const queryClient = new QueryClient({
+    defaultOptions: { queries: { retry: false } },
+  })
+
+  return function QueryWrapper({ children }: { children: ReactNode }) {
+    return (
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    )
+  }
+}

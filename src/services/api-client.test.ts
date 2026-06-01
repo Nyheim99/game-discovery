@@ -45,7 +45,7 @@ describe('api-client', () => {
       const result = await fetchGames(
         {
           genreId: 4,
-          platformId: null,
+          platformId: 18,
           searchText: 'witcher',
           sortOrder: '-rating',
         },
@@ -56,10 +56,9 @@ describe('api-client', () => {
       expect(url.pathname).toBe('/api/games')
       expect(url.searchParams.get('page')).toBe('2')
       expect(url.searchParams.get('genres')).toBe('4')
+      expect(url.searchParams.get('parent_platforms')).toBe('18')
       expect(url.searchParams.get('search')).toBe('witcher')
       expect(url.searchParams.get('ordering')).toBe('-rating')
-      // platformId was null, so its param must be absent entirely.
-      expect(url.searchParams.get('parent_platforms')).toBeNull()
       // fetchGames returns the full list wrapper, untouched.
       expect(result).toEqual(body)
     })

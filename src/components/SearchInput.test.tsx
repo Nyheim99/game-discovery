@@ -27,4 +27,18 @@ describe('SearchInput', () => {
 
     expect(onSearch).not.toHaveBeenCalled()
   })
+
+  it('calls onSearch with an empty string when submitted with no text', async () => {
+    const user = userEvent.setup()
+    const onSearch = vi.fn()
+    render(<SearchInput onSearch={onSearch} />)
+
+    // Focus the empty field and submit; the ?? '' fallback yields ''.
+    await user.type(
+      screen.getByRole('searchbox', { name: 'Search games' }),
+      '{enter}',
+    )
+
+    expect(onSearch).toHaveBeenCalledWith('')
+  })
 })
